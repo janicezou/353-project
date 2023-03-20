@@ -148,7 +148,7 @@ app.use("/delete", async (req, res) => {
  * edit information about a specific course
  * @Param number: the course number for the course (primary key)
  */
-app.use("/edit", (req, res)=>{
+app.use("/edit", (req, res)=> {
     var courseNum = req.query.number
     if (!courseNum){
       console.log('No course number inputted!');
