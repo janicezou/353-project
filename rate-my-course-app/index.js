@@ -141,6 +141,151 @@ app.use("/delete", async (req, res) => {
 //   });
 // });
 
+/**
+ * User Story 3
+ * Author: Xinran
+ * Date modified: Mar 19, 2022
+ * edit information about a specific course
+ * @Param number: the course number for the course (primary key)
+ */
+app.use("/edit", (req, res)=>{
+    var courseNum = req.query.number
+    if (!courseNum){
+      console.log('No course number inputted!');
+      res.json({'status': 'No key inputted'});
+    }
+
+    var filter = { 'number' : courseNum };
+    var courseName = req.query.name;
+    var instructor = req.query.instructor;
+    var department = req.query.department;
+    var school = req.query.school;
+    var description = req.query.description;
+
+    var action = {}
+    if (courseName){
+      action['$set']['name'] = courseName
+    }
+	  if (instructor){
+      action['$set']['instructor'] = instructor
+    }
+    if (department){
+      action['$set']['department'] = department
+    }
+    if (school){
+      action['$set']['school'] = school
+    }
+    if (description){
+      action['$set']['description'] = description
+    }
+
+    Course.findOneAndUpdate( filter, action, (e, p) => {
+      if (e) {
+        res.json( { 'status' : e } );
+      }
+      else if (!p) {
+        res.json({'status': 'Course Not found'})
+      } else {
+        res.json( { 'status' : 'updated' } );
+      }
+    });
+});
+
+
+/**
+ * User Story 7
+ * Author: Xinran
+ * Date modified: Mar 19, 2022
+ * view the comments made about a specified course
+ * @Param number: the course number for the course (primary key)
+ */
+app.use("/viewComments", (req, res)=>{
+  var courseNum = req.query.number
+  var queryObject = {}
+  if (!courseNum){
+    console.log('No course number inputted!');
+    res.json({});
+  } else {
+    queryObject = {'number': courseNum}
+  }
+  Course.find( queryObject, (err, courses) => {
+    console.log(courses)
+    if(err){
+      console.log('error' + err)
+      res.json({})
+    } else if (courses.length == 0){
+      console.log('empty array')
+      res.json({})
+    } else {
+      // since number is primary key, it is not possible to have more than one course having the same name
+      var singleCourse = course[0]
+      var comments = singleCourse.comments
+      res.json(comments)
+    } 
+  });
+});
+
+/** 
+ * User story 7
+ * Author: Xinran
+ * Date modified: Mar 19. 2022
+ * edit or delete the comment for a specific course
+ * @Param number: the course number for the course (primary key)
+ * @Param _id: the id for the comment to be deleted or edited
+ * @Param text: the updated text, if empty then delete
+ * @Param delete: whether or not to delete the text, if has a value, then delete
+ */
+app.use("/editOrDeleteComments", (req, res)=>{
+  var courseNum = req.query.number
+  var comment_id = req.query._id
+  var toDelete = req.query.delete
+  var text = req.query.text
+  var queryObject = {}
+  if (!courseNum || !comment_id){
+    console.log('No course number inputted!');
+    res.json({});
+  } else {
+    queryObject = {'number': courseNum, 'comments._id': comment_id}
+  }
+  // only when text has a value
+  if(text & !toDelete){
+    var action = {'$set': {'comments.text': text}}
+    Course.findOneAndUpdate( queryObject, action, (err, course) => {
+      console.log(courses)
+      if(err){
+        console.log('error: ' + err)
+        res.json({'status': err})
+      } else if (!course){
+        console.log('course not found')
+        res.json({'status': 'course not found'})
+      } else {
+        res.json({'status': 'edit succeed'})
+      } 
+    });
+  } else {
+    queryObject = {'number': courseNum}
+    Course.find(queryObject, (e, courses) =>{
+      if(e){
+        console.log('error: ' + e)
+        res.json({'status': e})
+      } else if (courses.length == 0){
+        console.log('course not found')
+        res.json({'status': 'course not found'})
+      } else {
+        // unique id for course, thus only one will be returned
+        courses[0].comments.id(_id).remove() // delete the comment with id (_id)
+        courses[0].save((err) => { 
+          if (err) {
+            console.log('delete comment failed')
+            res.json({'status': err})
+          } else {
+            res.json({'status': 'delete success'})
+          }
+        })
+      }
+    })
+  }
+});
 /*************************************************/
 
 app.use("/templates", express.static("templates"));
