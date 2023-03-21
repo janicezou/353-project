@@ -225,6 +225,44 @@ app.use("/viewComments", (req, res)=>{
   });
 });
 
+/**
+ * Add a comment (for test purpose only)
+ * Author: Xinran
+ * Date Modified: Mar. 20, 2022
+ * @param number: course number
+ * @param text: comment text
+ * @param rating: course rating
+ */
+
+app.use("/addComment", (req, res) =>{
+  var courseNum = req.query.number
+  var comment = req.query.text
+  var rating = Number(req.query.rating)
+  if(!rating || !courseNum){
+    console.log('No course number or no rating')
+    res.json({'status': 'No course number or no rating'})
+  }
+  if(!comment){
+    comment = ''
+  }
+  queryObject = {'number': courseNum}
+  commentObj = {author: 'rand', rating: rating, text: comment}
+  action = {'$push': {comments: commentObj}}
+  Course.findOneAndUpdate( queryObject, action, (err, courses) => {
+    console.log(courses)
+    if(err){
+      console.log('error' + err)
+      res.json({'status': err})
+    } else if (courses.length == 0){
+      console.log('empty array')
+      res.json({'status': 'course not found'})
+    } else {
+      res.json({'status': 'succeed'})
+    } 
+  });
+
+})
+
 /** 
  * User story 7
  * Author: Xinran
