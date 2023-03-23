@@ -9,6 +9,7 @@ var Schema = mongoose.Schema;
 var commentSchema = new Schema({
   // an _id will be automatically created
   author: {type: String},
+  rating: {type: Number},
   text: {type: String}
 }, {timestamps: true});
 
