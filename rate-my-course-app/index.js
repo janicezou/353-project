@@ -27,7 +27,11 @@ app.use("/add", async (req, res) => {
   // save the course to the database
   try {
     const result = await newCourse.save();
-    res.send("successfully added " + newCourse.name + " to the database");
+    res.type("html").status(200);
+    res.write("sucessfully added " + newCourse.name + " to the database");
+    res.write(' <a href="/templates/homepage.html">[HOME]</a>');
+    res.end();
+    return;
   } catch (err) {
     res.type("html").status(200);
     res.write("uh oh: " + err);
@@ -86,12 +90,26 @@ app.use("/add", async (req, res) => {
 // User Story 4
 // delete a course
 app.use("/delete", async (req, res) => {
+  // res.redirect(' <a href="/internalDelete?number=' + req.body.number + '">[Delete]</a>');
   var filter = { number: req.body.number };
   try {
     const result = await Course.findOneAndDelete(filter);
     console.log(result);
+    if(result){
+      res.type("html").status(200);
+      res.write("Sucessfully deleted "+req.body.number); 
+      res.write(' <a href="/templates/homepage.html\">[HOME]</a>');
+    } else {
+      res.type("html").status(200);
+      res.write("No such course in database"); 
+      res.write(' <a href="/templates/homepage.html\">[HOME]</a>');
+    }
+    res.end();
+    return;
   } catch (err) {
-    console.log("error");
+    console.log("uh oh" + err);
+    res.end();
+    return;
   }
   // Course.findOneAndDelete(filter, (err, course) => {
   //   if (err) {
@@ -258,6 +276,99 @@ app.use("/addComment", (req, res) => {
     }
   });
 });
+
+/**
+ * User story 5
+ * Author: Ary
+ * Date modified: Mar 24. 2023
+ * I can perform a course object search by name/number/department/professor 
+ * @Param name: the course name 
+ * @Param number: the course number for the course (primary key)
+ * @Param department: the department id 
+ * @Param professor: the course professor
+ */
+app.use("/search", async (req, res) => {
+  var filter = {};
+  if(req.body.name){
+    filter.name = req.body.name;
+  }
+  if(req.body.number){
+    filter.number = req.body.number;
+  }
+  if(req.body.department){
+    filter.department = req.body.department;
+  }
+  if(req.body.professor){
+    filter.instructor = req.body.professor;
+  }
+  // res.send(filter);
+  // find filtered Course objects in the database
+  try {
+    const result = await Course.find(filter).sort({ rating: "asc" });
+    console.log(result);
+    if (result.length == 0) {
+      res.type("html").status(200);
+      res.write("There are no courses matching the search criteria");
+      res.write(' <a href="/templates/homepage.html\">[HOME]</a>');
+      res.end();
+      return;
+    } else {
+      res.type("html").status(200);
+      res.write("Here are the courses in the database:");
+      res.write("<ul>");
+      // show all the courses
+      result.forEach((course) => {
+        res.write("<li>");
+        res.write( "Course Name: " + course.name + "; Course Number: " + course.number);
+        res.write(' <a href="/internalDelete?number=' + course.number + '">[Delete]</a>');
+
+      })
+      res.write(' <a href="/templates/homepage.html\">[HOME]</a>');
+      res.end();
+      return;
+
+    }
+  } catch (err) {
+      res.type("html").status(200);
+      console.log("uh oh" + err);
+      res.write(err);
+      return;
+  }
+  
+});
+
+app.use("/internalDelete", async (req, res) => {
+  var filter = { number: req.query.number };
+  try {
+    const result = await Course.findOneAndDelete(filter);
+    console.log(result);
+    if(result){
+      res.type("html").status(200);
+      res.write("Sucessfully deleted "+ req.query.number); 
+      res.write(' <a href="/templates/homepage.html\">[HOME]</a>');
+    } else {
+      res.type("html").status(200);
+      res.write("No such course in database"); 
+      res.write(' <a href="/templates/homepage.html\">[HOME]</a>');
+    }
+    res.end();
+    return;
+  } catch (err) {
+    console.log("uh oh" + err);
+    res.end();
+    return;
+  }
+  // Course.findOneAndDelete(filter, (err, course) => {
+  //   if (err) {
+  //     console.log("error");
+  //   } else if (!course) {
+  //     console.log("no course");
+  //   } else {
+  //     console.log("success");
+  //   }
+  // });
+});
+
 
 /**
  * User story 7
