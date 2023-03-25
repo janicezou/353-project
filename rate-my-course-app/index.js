@@ -208,7 +208,7 @@ app.use("/edit", (req, res) => {
 });
 
 /**
- * User Story 7
+ * User Story 3
  * Author: Xinran
  * Date modified: Mar 19, 2022
  * view the comments made about a specified course
@@ -371,7 +371,7 @@ app.use("/internalDelete", async (req, res) => {
 
 
 /**
- * User story 7
+ * User story 6
  * Author: Xinran
  * Date modified: Mar 19. 2022
  * edit or delete the comment for a specific course
