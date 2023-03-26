@@ -168,7 +168,7 @@ app.use("/delete", async (req, res) => {
 app.get("/edit/:number", (req, res) => {
   var courseNum = req.params.number;
   var filter = { number: courseNum };
-  Course.find(filter, action, (err, courses) => {
+  Course.find(filter, (err, courses) => {
     if (err) {
       res.type("html").status(200);
       res.write(err);
