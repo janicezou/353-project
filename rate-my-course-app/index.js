@@ -306,8 +306,6 @@ app.get("/viewComments/:number", (req, res) => {
  * Author: Xinran
  * Date Modified: Mar. 20, 2022
  * @param number: course number
- * @param text: comment text
- * @param rating: course rating
  */
 
 app.get("/addComment/:number", (req, res) => {
@@ -339,8 +337,28 @@ app.get("/addComment/:number", (req, res) => {
       res.end();
     }
   })
-  
-  
+});
+
+app.get("/addComment/:number", (req, res) => {
+  var courseNum = req.params.number;
+  var queryObject = { number: courseNum };
+  var comment = req.body.text;
+  var rating = Number(req.body.rating);
+  var commentObj = { author: "rand", rating: rating, text: comment };
+  var action = { $push: { comments: commentObj } };
+  Course.findOneAndUpdate(queryObject, action, (err, course) => {
+    if (err) {
+      res.type("html").status(200);
+      res.write("Failed in adding comment for "+ courseNum + ": " + err); 
+      res.write(' <a href="/templates/homepage.html\">[HOME]</a>');
+      res.end()
+    } else {
+      res.type("html").status(200);
+      res.write("Sucessfully added comment for "+ courseNum); 
+      res.write(' <a href="/templates/homepage.html\">[HOME]</a>');
+      res.end()
+    }
+  });
 });
 
 /**
@@ -431,7 +449,7 @@ app.use("/internalDelete", async (req, res) => {
  * User story 6
  * Author: Xinran
  * Date modified: Mar 19. 2022
- * edit the comment for a specific course
+ * Generate the form for edit information
  * @Param number: the course number for the course (primary key)
  * @Param _id: the id for the comment to be deleted or edited
  */
@@ -468,14 +486,26 @@ app.get("/editComment/:course_id/:comment_id", (req, res) => {
   });
 });
 
+/**
+ * User story 6
+ * Author: Xinran
+ * Date modified: Mar 19. 2022
+ * edit the comment for a specific course
+ * @Param number: the course number for the course (primary key)
+ * @Param _id: the id for the comment to be deleted or edited
+ */
 app.post("/editComment/:number/:comment_id", (req, res) => {
   var courseNum = req.params.number;
   var comment_id = req.params.comment_id;
   var text = req.body.text;
   var rating = req.body.rating;
   var queryObject = { number: courseNum, "comments._id": comment_id };
-
-  // only when text has a value
+  if(Number(rating) < 0 || Number(rating) > 5){
+    res.type("html").status(200);
+    console.log("error: " + err);
+    res.write("Rating should be within the range (0,5): " + err);
+    res.write(' <a href="/editComment/'+courseNum+'/'+comment_id+'">[BACK]</a>');
+  }
   var action = { $set: { "comments.text": text, "comments.rating":rating} };
   Course.findOneAndUpdate(queryObject, action, (err, course) => {
     if (err) {
@@ -502,11 +532,9 @@ app.post("/editComment/:number/:comment_id", (req, res) => {
  * User story 6
  * Author: Xinran
  * Date modified: Mar 19. 2022
- * edit the comment for a specific course
+ * delete the comment for a specific course
  * @Param number: the course number for the course (primary key)
- * @Param _id: the id for the comment to edit
- * @Param rating: the rating for the comment to be edited
- * @Param text: the updated text
+ * @Param comment_id: the id for the comment to edit
  */
 app.get("/deleteComment/:number/:comment_id", (req, res) => {
   var courseNum = req.params.number;
