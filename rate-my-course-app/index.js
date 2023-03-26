@@ -182,7 +182,7 @@ app.get("/edit/:number", (req, res) => {
     } else {
       var course = courses[0]
       res.type("html").status(200);
-      res.write('Edit information for '+ course.name)
+      res.write('Edit information for '+ course.number)
       res.write('<form id="edit-form" action = "/edit/' + courseNum + '" method="post">')
       res.write('<label for="name">Name:</label>')
       res.write('<input type="text" id="name" name="name" value="'+course.name+'">')
