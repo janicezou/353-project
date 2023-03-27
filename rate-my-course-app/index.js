@@ -51,41 +51,57 @@ app.use("/add", async (req, res) => {
   //   });
 });
 
-// User Story 1, the following are just examples from Lab 5, need to be re-implemented
-// endpoint for showing all the courses
-// app.use("/all", (req, res) => {
-//   // find all the Course objects in the database
-//   Course.find({}, (err, courses) => {
-//     if (err) {
-//       res.type("html").status(200);
-//       console.log("uh oh" + err);
-//       res.write(err);
-//     } else {
-//       if (courses.length == 0) {
-//         res.type("html").status(200);
-//         res.write("There are no courses");
-//         res.end();
-//         return;
-//       } else {
-//         res.type("html").status(200);
-//         res.write("Here are the courses in the database:");
-//         res.write("<ul>");
-//         // show all the courses
-//         courses.forEach((course) => {
-//           res.write("<li>");
-//           res.write(
-//             "Course Name: " + course.name + "; Course Number: " + course.number
-//           );
-//           // this creates a link to the /delete endpoint
-//           res.write(' <a href="/delete?name=' + course.name + '">[Delete]</a>');
-//           res.write("</li>");
-//         });
-//         res.write("</ul>");
-//         res.end();
-//       }
-//     }
-//   }).sort({ number: "asc" }); // this sorts them BEFORE rendering the results
-// });
+/**
+ * User Story 1 & 2
+ * Author: Quinn
+ * Date modified: Mar 26, 2022
+ * view all courses
+ * navigate to a course
+ */
+app.use("/all", (req, res) => {
+  Course.find({}, (err, allCourses) => {
+    if (err) {
+      res.type("html").status(200);
+      res.write("An error occured. Could not find any course.")
+      res.write(' <a href="/templates/homepage.html">[HOME]</a>');
+      res.end()
+      return;
+    } else if (allCourses.length == 0) {
+      res.type("html").status(200);
+      res.write("There are no courses.")
+      res.write(' <a href="/templates/homepage.html">[HOME]</a>');
+      res.end()
+      return;
+    } else {
+      res.type("html").status(200);
+      res.write("There are " + allCourses.length + " courses in the database.")
+      res.write("<ul>");
+      allCourses.forEach((course) => {
+        res.write("<li>");
+        if (!course) {
+          res.type("html").status(200);
+          res.write("Could not find this course.")
+          res.end()
+        } else {
+          res.type("html").status(200);
+          res.write('<form id="view-course" action = "/view/' + course.number + '" method="post">')
+          res.write('About '+ course.number + ' ' + course.name)
+          res.write('instructor: ' + course.instructor)
+          res.write('department: ' + course.department)
+          res.write('school: ' + school)
+          res.write('description: ' + description)
+          res.write('rating: ' + course.rating)
+          res.write('<a href="/viewComments/' + course.number + '">View Comments</a>')
+          res.write('<a href="/edit/' + course.number + '">[EDIT]</a>')
+          res.write('<a href="/templates/homepage.html\">[HOME]</a>')
+        }
+        res.write("</li>");
+      })
+      res.write("</li>");
+      res.end()
+    }
+  }).sort({ number: "asc" })
+})
 
 // User Story 4
 // delete a course
