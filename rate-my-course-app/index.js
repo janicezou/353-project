@@ -58,7 +58,7 @@ app.use("/add", async (req, res) => {
  * view all courses
  * navigate to a course
  */
-// app.use("/viewCourse/:coursenumber") // display one course info
+// app.get("/viewCourse/:coursenumber") // display one course info
 app.use("/all", (req, res) => {
   Course.find({}, (err, allCourses) => {
     if (err) {
@@ -80,13 +80,15 @@ app.use("/all", (req, res) => {
       allCourses.forEach((course) => {
         res.write("<li>");
         if(course){
+          // use list instead of form
           res.write('<form id="view-course" action = "/view/' + course.number + '" method="post">')
           //display in view one course
           res.write('About '+ course.number + ' ' + course.name)
           res.write('instructor: ' + course.instructor)
           res.write('department: ' + course.department)
-          res.write('school: ' + school)
-          res.write('description: ' + description)
+          res.write('school: ' + course.school)
+          res.write('description: ' + course.description)
+          //if rating is null, dont display
           res.write('rating: ' + course.rating)
           res.write('<a href="/viewComments/' + course.number + '">View Comments</a>')
           res.write('<a href="/edit/' + course.number + '">[EDIT]</a>')
@@ -100,8 +102,11 @@ app.use("/all", (req, res) => {
   }).sort({ number: "asc" })
 })
 
-// User Story 4
-// delete a course
+/**
+ * User story 4
+ * delete a course
+ * Author: Yiting Zou
+ */
 app.use("/delete", async (req, res) => {
   // res.redirect(' <a href="/internalDelete?number=' + req.body.number + '">[Delete]</a>');
   var filter = { number: req.body.number };
@@ -124,52 +129,7 @@ app.use("/delete", async (req, res) => {
     res.end();
     return;
   }
-  // Course.findOneAndDelete(filter, (err, course) => {
-  //   if (err) {
-  //     console.log("error");
-  //   } else if (!course) {
-  //     console.log("no course");
-  //   } else {
-  //     console.log("success");
-  //   }
-  // });
 });
-
-// Example from Lab 5, need to be re-implemented
-// endpoint for accessing data via the web api
-// to use this, make a request for /api to get an array of all Course objects
-// or /api?name=[whatever] to get a single object
-// app.use("/api", (req, res) => {
-//   // construct the query object
-//   var queryObject = {};
-//   if (req.query.name) {
-//     // if there's a name in the query parameter, use it here
-//     queryObject = { name: req.query.name };
-//   }
-
-//   Course.find(queryObject, (err, courses) => {
-//     console.log(courses);
-//     if (err) {
-//       console.log("uh oh" + err);
-//       res.json({});
-//     } else if (courses.length == 0) {
-//       // no objects found, so send back empty json
-//       res.json({});
-//     } else if (courses.length == 1) {
-//       var course = courses[0];
-//       // send back a single JSON object
-//       res.json({ name: course.name, number: course.number });
-//     } else {
-//       // construct an array out of the result
-//       var returnArray = [];
-//       courses.forEach((course) => {
-//         returnArray.push({ name: course.name, number: course.number });
-//       });
-//       // send it back as JSON Array
-//       res.json(returnArray);
-//     }
-//   });
-// });
 
 /**
  * User Story 3
@@ -293,23 +253,23 @@ app.get("/viewComments/:number", (req, res) => {
       var singleCourse = courses[0];
       var comments = singleCourse.comments;
       res.type('html').status(200);
-			res.write('Here are all comments for ' + singleCourse.name + 'in the database:');
+			res.write('Here are all comments for ' + singleCourse.name + ' in the database:');
 			res.write('<ul>');
 			// show all the comments
 			comments.forEach( (comment) => {
         res.write("<li>")
         res.write('ID: ' + comment._id);
         res.write('<ul>');
-			    res.write('<li>');
-			    res.write('Rating: ' + comment.rating);
-          res.write('</li>'); 
-          res.write('<li>');
-          res.write('Comment: ' + comment.text);
-          res.write('</li>'); 
-          res.write('<li>');
-			    res.write(" <a href=\"/deleteComment/" + courseNum + "/" + comment._id + "\">[DELETE]</a>");
-          res.write(" <a href=\"/editComment/" + courseNum + "/" + comment._id + "\">[EDIT]</a>");
-          res.write('<li>');
+        res.write('<li>');
+        res.write('Rating: ' + comment.rating);
+        res.write('</li>'); 
+        res.write('<li>');
+        res.write('Comment: ' + comment.text);
+        res.write('</li>'); 
+        res.write('<li>');
+        res.write(" <a href=\"/deleteComment/" + courseNum + "/" + comment._id + "\">[DELETE]</a>");
+        res.write(" <a href=\"/editComment/" + courseNum + "/" + comment._id + "\">[EDIT]</a>");
+        res.write('<li>');
         res.write('</ul>');
         res.write('</li>')
 			});
