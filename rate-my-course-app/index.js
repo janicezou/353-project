@@ -58,6 +58,7 @@ app.use("/add", async (req, res) => {
  * view all courses
  * navigate to a course
  */
+// app.use("/viewCourse/:coursenumber") // display one course info
 app.use("/all", (req, res) => {
   Course.find({}, (err, allCourses) => {
     if (err) {
@@ -78,13 +79,9 @@ app.use("/all", (req, res) => {
       res.write("<ul>");
       allCourses.forEach((course) => {
         res.write("<li>");
-        if (!course) {
-          res.type("html").status(200);
-          res.write("Could not find this course.")
-          res.end()
-        } else {
-          res.type("html").status(200);
+        if(course){
           res.write('<form id="view-course" action = "/view/' + course.number + '" method="post">')
+          //display in view one course
           res.write('About '+ course.number + ' ' + course.name)
           res.write('instructor: ' + course.instructor)
           res.write('department: ' + course.department)
