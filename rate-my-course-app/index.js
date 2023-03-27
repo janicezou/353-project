@@ -80,19 +80,9 @@ app.use("/all", (req, res) => {
       allCourses.forEach((course) => {
         res.write("<li>");
         if(course){
-          // use list instead of form
-          res.write('<form id="view-course" action = "/view/' + course.number + '" method="post">')
-          //display in view one course
-          res.write('About '+ course.number + ' ' + course.name)
-          res.write('instructor: ' + course.instructor)
-          res.write('department: ' + course.department)
-          res.write('school: ' + course.school)
-          res.write('description: ' + course.description)
-          //if rating is null, dont display
-          res.write('rating: ' + course.rating)
-          res.write('<a href="/viewComments/' + course.number + '">View Comments</a>')
-          res.write('<a href="/edit/' + course.number + '">[EDIT]</a>')
-          res.write('<a href="/templates/homepage.html\">[HOME]</a>')
+          res.write('<a href="/viewCourse/' + course.number + '">'+ course.name + '</a><br>')
+          res.write('instructor: ' + course.instructor + ' department: ' + course.department + ' school: ' + course.school)
+          res.write('<br> <a href="/addComment/' + course.number + '">Add a Comment (Test purpose only)</a><br>')
         }
         res.write("</li>");
       })
@@ -102,11 +92,38 @@ app.use("/all", (req, res) => {
   }).sort({ number: "asc" })
 })
 
-/**
- * User story 4
- * delete a course
- * Author: Yiting Zou
- */
+app.get("/viewCourse/:number", (req, res) => {
+  var courseNum = req.params.number
+  var queryObject = { number: courseNum }
+  Course.find(queryObject, (err, course) => {
+    if (err) {
+      res.type('html').status(200)
+      res.write("An error occured.")
+      res.end()
+    } else if (course.length == 0) {
+      res.type('html').status(200)
+      res.write("Course not found")
+      res.end()
+    } else {
+      res.type('html').status(200)
+      singleCourse = course[0]
+      res.write(singleCourse.number + " " + singleCourse.name + "<br> instructor: " + singleCourse.instructor)
+      res.write("<br> department: " + singleCourse.department + ' <br> school: ' + singleCourse.school)
+      res.write('<br> description: ' + singleCourse.description)
+      if(singleCourse.rating){
+        res.write('<br> rating: ' + singleCourse.rating)
+      }
+      res.write('<br> <a href="/viewComments/' + singleCourse.number + '">View Comments</a><br>')
+      res.write('<br> <a href="/addComment/' + singleCourse.number + '">Add a Comment (Test purpose only)</a><br>')
+      res.write('<a href="/edit/' + singleCourse.number + '">[EDIT]</a><br>')
+      res.write('<a href="/templates/homepage.html\">[HOME]</a><br>')
+      res.end()
+    }
+  })
+})
+
+// User Story 4
+// delete a course
 app.use("/delete", async (req, res) => {
   // res.redirect(' <a href="/internalDelete?number=' + req.body.number + '">[Delete]</a>');
   var filter = { number: req.body.number };
