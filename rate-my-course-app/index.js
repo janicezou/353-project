@@ -504,6 +504,45 @@ app.use("/search", async (req, res) => {
   }
 });
 
+app.use("/searching", async (req, res) => {
+  var filter = {};
+  if(req.query.name){
+    filter.name = req.query.name;
+  }
+  if(req.query.number){
+    filter.number = req.query.number;
+  }
+  if(req.query.department){
+    filter.department = req.query.department;
+  }
+  if(req.query.professor){
+    filter.instructor = req.query.professor;
+  }
+  // res.send(filter);
+  // find filtered Course objects in the database
+  try {
+    const result=null;
+    if((req.query.sort).equalsIgnoreCase("name")){
+      const result = await Course.find(filter).sort({ name: "asc" });
+
+    } else {
+      const result = await Course.find(filter).sort({ rating: "asc" });
+
+    }
+    console.log(result);
+    res.type("html").status(200);
+    res.json(result);
+    return;
+  } catch (err) {
+      res.type("html").status(200);
+      console.log("uh oh" + err);
+      res.write(err);
+      res.end();
+      return;
+  }
+  
+});
+
 app.use("/internalDelete", async (req, res) => {
   var filter = { number: req.query.number };
   try {
