@@ -17,7 +17,17 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class Setup extends AppCompatActivity {
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
+
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,14 +36,16 @@ public class Setup extends AppCompatActivity {
     }
 
     public void onToLogInButtonClick(View v) {
-        Button tv = findViewById(R.id.toLogInField);
-        onConnectButtonClick(tv);
-        // direct to log in page
+        // create an intent to start the Signup Activity
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
+        // direct to sign up page
     }
 
     public void onToSignUpButtonClick(View v) {
-        Button tv = findViewById(R.id.toSignUpField);
-        onConnectButtonClick(tv);
+        // create an intent to start the Signup Activity
+        Intent i = new Intent(this, RegisterActivity.class);
+        startActivity(i);
         // direct to sign up page
     }
 

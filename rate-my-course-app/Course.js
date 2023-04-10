@@ -6,12 +6,16 @@ mongoose.connect("mongodb://127.0.0.1/myDatabase");
 
 var Schema = mongoose.Schema;
 
-var commentSchema = new Schema({
-  // an _id will be automatically created
-  author: {type: String},
-  rating: {type: Number},
-  text: {type: String}
-}, {timestamps: true});
+var commentSchema = new Schema(
+  {
+    // an _id will be automatically created
+    author: { type: String },
+    rating: { type: Number },
+    text: { type: String },
+    user: { type: Schema.Types.ObjectId, ref: "User" },
+  },
+  { timestamps: true }
+);
 
 var courseSchema = new Schema({
   name: { type: String, required: true },
@@ -21,8 +25,13 @@ var courseSchema = new Schema({
   school: String,
   description: String,
   rating: Number,
-  comments: [commentSchema] // an array holding all comments
+  comments: [commentSchema], // an array holding all comments
 });
 
 // export courseSchema as a class called Course
-module.exports = mongoose.model("Course", courseSchema);
+// and export coomentSchema as a class called Comment
+module.exports = {
+  Course: mongoose.model("Course", courseSchema),
+  Comment: mongoose.model("Comment", commentSchema),
+  commentSchema: commentSchema,
+};

@@ -8,6 +8,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // import the Course class from Course.js
 var Course = require("./Course.js");
 
+// import the User class from User.js
+var User = require("./User.js");
+
 /***************************************/
 
 // endpoint for adding a new course
@@ -63,64 +66,100 @@ app.use("/all", (req, res) => {
   Course.find({}, (err, allCourses) => {
     if (err) {
       res.type("html").status(200);
-      res.write("An error occured. Could not find any course.")
+      res.write("An error occured. Could not find any course.");
       res.write(' <a href="/templates/homepage.html">[HOME]</a>');
-      res.end()
+      res.end();
       return;
     } else if (allCourses.length == 0) {
       res.type("html").status(200);
-      res.write("There are no courses.")
+      res.write("There are no courses.");
       res.write(' <a href="/templates/homepage.html">[HOME]</a>');
-      res.end()
+      res.end();
       return;
     } else {
       res.type("html").status(200);
-      res.write("There are " + allCourses.length + " courses in the database.")
+      res.write("There are " + allCourses.length + " courses in the database.");
       res.write("<ul>");
       allCourses.forEach((course) => {
         res.write("<li>");
-        if(course){
-          res.write('<a href="/viewCourse/' + course.number + '">'+ course.name + '</a><br>')
-          res.write('instructor: ' + course.instructor + ' department: ' + course.department + ' school: ' + course.school)
-          res.write('<br> <a href="/addComment/' + course.number + '">Add a Comment (Test purpose only)</a><br>')
+        if (course) {
+          res.write(
+            '<a href="/viewCourse/' +
+              course.number +
+              '">' +
+              course.name +
+              "</a><br>"
+          );
+          res.write(
+            "instructor: " +
+              course.instructor +
+              " department: " +
+              course.department +
+              " school: " +
+              course.school
+          );
+          res.write(
+            '<br> <a href="/addComment/' +
+              course.number +
+              '">Add a Comment (Test purpose only)</a><br>'
+          );
         }
         res.write("</li>");
-      })
+      });
       res.write("</li>");
-      res.end()
+      res.end();
     }
-  }).sort({ number: "asc" })
-})
+  }).sort({ number: "asc" });
+});
 
 app.get("/viewCourse/:number", (req, res) => {
-  var courseNum = req.params.number
-  var queryObject = { number: courseNum }
+  var courseNum = req.params.number;
+  var queryObject = { number: courseNum };
   Course.find(queryObject, (err, course) => {
     if (err) {
-      res.type('html').status(200)
-      res.write("An error occured.")
-      res.end()
+      res.type("html").status(200);
+      res.write("An error occured.");
+      res.end();
     } else if (course.length == 0) {
-      res.type('html').status(200)
-      res.write("Course not found")
-      res.end()
+      res.type("html").status(200);
+      res.write("Course not found");
+      res.end();
     } else {
-      res.type('html').status(200)
-      singleCourse = course[0]
-      res.write(singleCourse.number + " " + singleCourse.name + "<br> instructor: " + singleCourse.instructor)
-      res.write("<br> department: " + singleCourse.department + ' <br> school: ' + singleCourse.school)
-      res.write('<br> description: ' + singleCourse.description)
-      if(singleCourse.rating){
-        res.write('<br> rating: ' + singleCourse.rating)
+      res.type("html").status(200);
+      singleCourse = course[0];
+      res.write(
+        singleCourse.number +
+          " " +
+          singleCourse.name +
+          "<br> instructor: " +
+          singleCourse.instructor
+      );
+      res.write(
+        "<br> department: " +
+          singleCourse.department +
+          " <br> school: " +
+          singleCourse.school
+      );
+      res.write("<br> description: " + singleCourse.description);
+      if (singleCourse.rating) {
+        res.write("<br> rating: " + singleCourse.rating);
       }
-      res.write('<br> <a href="/viewComments/' + singleCourse.number + '">View Comments</a><br>')
-      res.write('<br> <a href="/addComment/' + singleCourse.number + '">Add a Comment (Test purpose only)</a><br>')
-      res.write('<a href="/edit/' + singleCourse.number + '">[EDIT]</a><br>')
-      res.write('<a href="/templates/homepage.html\">[HOME]</a><br>')
-      res.end()
+      res.write(
+        '<br> <a href="/viewComments/' +
+          singleCourse.number +
+          '">View Comments</a><br>'
+      );
+      res.write(
+        '<br> <a href="/addComment/' +
+          singleCourse.number +
+          '">Add a Comment (Test purpose only)</a><br>'
+      );
+      res.write('<a href="/edit/' + singleCourse.number + '">[EDIT]</a><br>');
+      res.write('<a href="/templates/homepage.html">[HOME]</a><br>');
+      res.end();
     }
-  })
-})
+  });
+});
 
 // User Story 4
 // delete a course
@@ -130,14 +169,14 @@ app.use("/delete", async (req, res) => {
   try {
     const result = await Course.findOneAndDelete(filter);
     console.log(result);
-    if(result){
+    if (result) {
       res.type("html").status(200);
-      res.write("Sucessfully deleted "+req.body.number); 
-      res.write(' <a href="/templates/homepage.html\">[HOME]</a>');
+      res.write("Sucessfully deleted " + req.body.number);
+      res.write(' <a href="/templates/homepage.html">[HOME]</a>');
     } else {
       res.type("html").status(200);
-      res.write("No such course in database"); 
-      res.write(' <a href="/templates/homepage.html\">[HOME]</a>');
+      res.write("No such course in database");
+      res.write(' <a href="/templates/homepage.html">[HOME]</a>');
     }
     res.end();
     return;
@@ -170,24 +209,48 @@ app.get("/edit/:number", (req, res) => {
       res.write(' <a href="/templates/homepage.html">[HOME]</a>');
       res.end();
     } else {
-      var course = courses[0]
+      var course = courses[0];
       res.type("html").status(200);
-      res.write('Edit information for '+ course.number)
-      res.write('<form id="edit-form" action = "/edit/' + courseNum + '" method="post">')
-      res.write('<label for="name">Name:</label>')
-      res.write('<input type="text" id="name" name="name" value="'+course.name+'"><br>')
-      res.write('<label for="instructor">Instructor Name:</label>')
-      res.write('<input type="text" id="instructor" name="instructor" value="'+course.instructor+'"><br>')
-      res.write('<label for="department">Course Department:</label>')
-      res.write('<input type="text" id="department" name="department" value="'+course.department+'"><br>')
-      res.write('<label for="school">Course school:</label>')
-      res.write('<input type="text" id="school" name="school" value="'+course.school+'"><br>')
-      res.write('<label for="description">Course Description:</label>')
-      res.write('<input type="text" id="description" name="description" value="'+course.description+'"><br>')
-      res.write('<input type="submit" value="Save Changes">')
-      res.write('</form><br>')
-      res.write(' <a href="/templates/homepage.html\">[HOME]</a>');
-      res.write(' <a href="/internalDelete?number=' + courseNum + '">[Delete]</a>');
+      res.write("Edit information for " + course.number);
+      res.write(
+        '<form id="edit-form" action = "/edit/' + courseNum + '" method="post">'
+      );
+      res.write('<label for="name">Name:</label>');
+      res.write(
+        '<input type="text" id="name" name="name" value="' +
+          course.name +
+          '"><br>'
+      );
+      res.write('<label for="instructor">Instructor Name:</label>');
+      res.write(
+        '<input type="text" id="instructor" name="instructor" value="' +
+          course.instructor +
+          '"><br>'
+      );
+      res.write('<label for="department">Course Department:</label>');
+      res.write(
+        '<input type="text" id="department" name="department" value="' +
+          course.department +
+          '"><br>'
+      );
+      res.write('<label for="school">Course school:</label>');
+      res.write(
+        '<input type="text" id="school" name="school" value="' +
+          course.school +
+          '"><br>'
+      );
+      res.write('<label for="description">Course Description:</label>');
+      res.write(
+        '<input type="text" id="description" name="description" value="' +
+          course.description +
+          '"><br>'
+      );
+      res.write('<input type="submit" value="Save Changes">');
+      res.write("</form><br>");
+      res.write(' <a href="/templates/homepage.html">[HOME]</a>');
+      res.write(
+        ' <a href="/internalDelete?number=' + courseNum + '">[Delete]</a>'
+      );
       res.end();
     }
   });
@@ -203,9 +266,9 @@ app.post("/edit/:number", (req, res) => {
   var description = req.body.description;
 
   var action = {};
-  var actionObj = {}
+  var actionObj = {};
   if (courseName) {
-    actionObj.name = courseName
+    actionObj.name = courseName;
   }
   if (instructor) {
     actionObj.instructor = instructor;
@@ -220,22 +283,24 @@ app.post("/edit/:number", (req, res) => {
     actionObj.description = description;
   }
 
-  action = {'$set': actionObj}
+  action = { $set: actionObj };
 
   Course.findOneAndUpdate(filter, action, (e, p) => {
     if (e) {
-      res.type('html').status(200)
-      res.write("Unsucessfully edit course information: " + e +"<br>");
+      res.type("html").status(200);
+      res.write("Unsucessfully edit course information: " + e + "<br>");
       res.write(' <a href="/templates/homepage.html">[HOME]</a>');
       res.end();
     } else if (!p) {
-      res.type('html').status(200)
+      res.type("html").status(200);
       res.write("Course not found <br>");
       res.write(' <a href="/templates/homepage.html">[HOME]</a>');
       res.end();
     } else {
-      res.type('html').status(200)
-      res.write("Successfully updated the course" + p.name + "to the database <br>");
+      res.type("html").status(200);
+      res.write(
+        "Successfully updated the course" + p.name + "to the database <br>"
+      );
       res.write(' <a href="/templates/homepage.html">[HOME]</a>');
       res.end();
     }
@@ -256,12 +321,12 @@ app.get("/viewComments/:number", (req, res) => {
     console.log(courses);
     if (err) {
       console.log("error" + err);
-      res.type('html').status(200)
+      res.type("html").status(200);
       res.write("Unsucessfully added comment to the database: " + err);
       res.write(' <a href="/templates/homepage.html">[HOME]</a>');
       res.end();
     } else if (courses.length == 0) {
-      res.type('html').status(200)
+      res.type("html").status(200);
       res.write("Course not found");
       res.write(' <a href="/templates/homepage.html">[HOME]</a>');
       res.end();
@@ -269,28 +334,42 @@ app.get("/viewComments/:number", (req, res) => {
       // since number is primary key, it is not possible to have more than one course having the same name
       var singleCourse = courses[0];
       var comments = singleCourse.comments;
-      res.type('html').status(200);
-			res.write('Here are all comments for ' + singleCourse.name + ' in the database:');
-			res.write('<ul>');
-			// show all the comments
-			comments.forEach( (comment) => {
-        res.write("<li>")
-        res.write('ID: ' + comment._id);
-        res.write('<ul>');
-        res.write('<li>');
-        res.write('Rating: ' + comment.rating);
-        res.write('</li>'); 
-        res.write('<li>');
-        res.write('Comment: ' + comment.text);
-        res.write('</li>'); 
-        res.write('<li>');
-        res.write(" <a href=\"/deleteComment/" + courseNum + "/" + comment._id + "\">[DELETE]</a>");
-        res.write(" <a href=\"/editComment/" + courseNum + "/" + comment._id + "\">[EDIT]</a>");
-        res.write('<li>');
-        res.write('</ul>');
-        res.write('</li>')
-			});
-			res.write('</ul>');
+      res.type("html").status(200);
+      res.write(
+        "Here are all comments for " + singleCourse.name + " in the database:"
+      );
+      res.write("<ul>");
+      // show all the comments
+      comments.forEach((comment) => {
+        res.write("<li>");
+        res.write("ID: " + comment._id);
+        res.write("<ul>");
+        res.write("<li>");
+        res.write("Rating: " + comment.rating);
+        res.write("</li>");
+        res.write("<li>");
+        res.write("Comment: " + comment.text);
+        res.write("</li>");
+        res.write("<li>");
+        res.write(
+          ' <a href="/deleteComment/' +
+            courseNum +
+            "/" +
+            comment._id +
+            '">[DELETE]</a>'
+        );
+        res.write(
+          ' <a href="/editComment/' +
+            courseNum +
+            "/" +
+            comment._id +
+            '">[EDIT]</a>'
+        );
+        res.write("<li>");
+        res.write("</ul>");
+        res.write("</li>");
+      });
+      res.write("</ul>");
       res.write(' <a href="/templates/homepage.html">[HOME]</a>');
       res.end();
     }
@@ -307,8 +386,8 @@ app.get("/viewComments/:number", (req, res) => {
 app.get("/addComment/:number", (req, res) => {
   var courseNum = req.params.number;
   var queryObject = { number: courseNum };
-  Course.find(queryObject, (e, courses) =>{
-    if(e){
+  Course.find(queryObject, (e, courses) => {
+    if (e) {
       res.type("html").status(200);
       res.write("Error " + e);
       res.write(' <a href="/templates/homepage.html">[HOME]</a>');
@@ -319,19 +398,23 @@ app.get("/addComment/:number", (req, res) => {
       res.write(' <a href="/templates/homepage.html">[HOME]</a>');
       res.end();
     } else {
-      var course = courses[0]
+      var course = courses[0];
       res.type("html").status(200);
-      res.write('Add comment for '+ course.name)
-      res.write('<form id="add-comment-form" action = "/addComment/' + courseNum + '" method="post">')
-      res.write('<label for="rating">Rating:</label>')
-      res.write('<input type="text" id="rating" name="rating" value="">')
-      res.write('<label for="text">Comment:</label>')
-      res.write('<input type="text" id="text" name="text" value="">')
-      res.write('<input type="submit" value="Submit comment">')
-      res.write('</form>')
+      res.write("Add comment for " + course.name);
+      res.write(
+        '<form id="add-comment-form" action = "/addComment/' +
+          courseNum +
+          '" method="post">'
+      );
+      res.write('<label for="rating">Rating:</label>');
+      res.write('<input type="text" id="rating" name="rating" value="">');
+      res.write('<label for="text">Comment:</label>');
+      res.write('<input type="text" id="text" name="text" value="">');
+      res.write('<input type="submit" value="Submit comment">');
+      res.write("</form>");
       res.end();
     }
-  })
+  });
 });
 
 app.post("/addComment/:number", (req, res) => {
@@ -339,22 +422,22 @@ app.post("/addComment/:number", (req, res) => {
   var queryObject = { number: courseNum };
   var comment = req.body.text;
   var rating = Number(req.body.rating);
-  console.log(req.body.text)
+  console.log(req.body.text);
   var commentObj = { author: "rand", rating: rating, text: comment };
-  var action = { '$push': { comments: commentObj } };
+  var action = { $push: { comments: commentObj } };
   Course.findOneAndUpdate(queryObject, action, (err, course) => {
     if (err) {
       res.type("html").status(200);
-      console.log("failed in adding comments")
-      res.write("Failed in adding comment for "+ courseNum + ": " + err); 
-      res.write(' <a href="/templates/homepage.html\">[HOME]</a>');
-      res.end()
+      console.log("failed in adding comments");
+      res.write("Failed in adding comment for " + courseNum + ": " + err);
+      res.write(' <a href="/templates/homepage.html">[HOME]</a>');
+      res.end();
     } else {
       res.type("html").status(200);
-      console.log("succeeded in adding comments")
-      res.write("Sucessfully added comment for "+ courseNum); 
-      res.write(' <a href="/templates/homepage.html\">[HOME]</a>');
-      res.end()
+      console.log("succeeded in adding comments");
+      res.write("Sucessfully added comment for " + courseNum);
+      res.write(' <a href="/templates/homepage.html">[HOME]</a>');
+      res.end();
     }
   });
 });
@@ -363,24 +446,24 @@ app.post("/addComment/:number", (req, res) => {
  * User story 5
  * Author: Ary
  * Date modified: Mar 24. 2023
- * I can perform a course object search by name/number/department/professor 
- * @Param name: the course name 
+ * I can perform a course object search by name/number/department/professor
+ * @Param name: the course name
  * @Param number: the course number for the course (primary key)
- * @Param department: the department id 
+ * @Param department: the department id
  * @Param professor: the course professor
  */
 app.use("/search", async (req, res) => {
   var filter = {};
-  if(req.body.name){
+  if (req.body.name) {
     filter.name = req.body.name;
   }
-  if(req.body.number){
+  if (req.body.number) {
     filter.number = req.body.number;
   }
-  if(req.body.department){
+  if (req.body.department) {
     filter.department = req.body.department;
   }
-  if(req.body.professor){
+  if (req.body.professor) {
     filter.instructor = req.body.professor;
   }
   // res.send(filter);
@@ -391,7 +474,7 @@ app.use("/search", async (req, res) => {
     if (result.length == 0) {
       res.type("html").status(200);
       res.write("There are no courses matching the search criteria");
-      res.write(' <a href="/templates/homepage.html\">[HOME]</a>');
+      res.write(' <a href="/templates/homepage.html">[HOME]</a>');
       res.end();
       return;
     } else {
@@ -401,22 +484,24 @@ app.use("/search", async (req, res) => {
       // show all the courses
       result.forEach((course) => {
         res.write("<li>");
-        res.write( "Course Name: " + course.name + "; Course Number: " + course.number);
-        res.write(' <a href="/internalDelete?number=' + course.number + '">[Delete]</a>');
-      })
-      res.write(' <a href="/templates/homepage.html\">[HOME]</a>');
+        res.write(
+          "Course Name: " + course.name + "; Course Number: " + course.number
+        );
+        res.write(
+          ' <a href="/internalDelete?number=' + course.number + '">[Delete]</a>'
+        );
+      });
+      res.write(' <a href="/templates/homepage.html">[HOME]</a>');
       res.end();
       return;
-
     }
   } catch (err) {
-      res.type("html").status(200);
-      console.log("uh oh" + err);
-      res.write(err);
-      res.end();
-      return;
+    res.type("html").status(200);
+    console.log("uh oh" + err);
+    res.write(err);
+    res.end();
+    return;
   }
-  
 });
 
 app.use("/internalDelete", async (req, res) => {
@@ -424,14 +509,14 @@ app.use("/internalDelete", async (req, res) => {
   try {
     const result = await Course.findOneAndDelete(filter);
     console.log(result);
-    if(result){
+    if (result) {
       res.type("html").status(200);
-      res.write("Sucessfully deleted "+ req.query.number); 
-      res.write(' <a href="/templates/homepage.html\">[HOME]</a>');
+      res.write("Sucessfully deleted " + req.query.number);
+      res.write(' <a href="/templates/homepage.html">[HOME]</a>');
     } else {
       res.type("html").status(200);
-      res.write("No such course in database"); 
-      res.write(' <a href="/templates/homepage.html\">[HOME]</a>');
+      res.write("No such course in database");
+      res.write(' <a href="/templates/homepage.html">[HOME]</a>');
     }
     res.end();
     return;
@@ -441,7 +526,6 @@ app.use("/internalDelete", async (req, res) => {
     return;
   }
 });
-
 
 /**
  * User story 6
@@ -454,9 +538,9 @@ app.use("/internalDelete", async (req, res) => {
 app.get("/editComment/:number/:comment_id", (req, res) => {
   var courseNum = req.params.number;
   var comment_id = req.params.comment_id;
-  var queryObject = { number: courseNum};
+  var queryObject = { number: courseNum };
   Course.find(queryObject, (err, courses) => {
-    console.log(courses)
+    console.log(courses);
     if (err) {
       res.type("html").status(200);
       res.write(err);
@@ -468,18 +552,41 @@ app.get("/editComment/:number/:comment_id", (req, res) => {
       res.write(' <a href="/templates/homepage.html">[HOME]</a>');
       res.end();
     } else {
-      var course = courses[0]
+      var course = courses[0];
       res.type("html").status(200);
-      res.write('Edit comment' + comment_id +'for '+ course.name)
-      res.write('<form id="edit-comment-form" action ="/editComment/'+courseNum+'/'+ comment_id+'" method="post">')
-      res.write('<label for="rating">Rating:</label>')
-      res.write('<input type="text" id="rating" name="rating" value="'+course.comments.id(comment_id).rating+'">' +'<br>')
-      res.write('<label for="text">Comment:</label>')
-      res.write('<input type="text" id="text" name="text" value="'+course.comments.id(comment_id).text+'">'+'<br>')
-      res.write('<input type="submit" value="Save Changes">')
-      res.write('</form>')
-      res.write(' <a href="/templates/homepage.html\">[HOME]</a>' +'<br>');
-      res.write(' <a href="/templates/deleteComment/'+courseNum + '/'+comment_id+ '/'+ '\">[DELETE]</a>');
+      res.write("Edit comment" + comment_id + "for " + course.name);
+      res.write(
+        '<form id="edit-comment-form" action ="/editComment/' +
+          courseNum +
+          "/" +
+          comment_id +
+          '" method="post">'
+      );
+      res.write('<label for="rating">Rating:</label>');
+      res.write(
+        '<input type="text" id="rating" name="rating" value="' +
+          course.comments.id(comment_id).rating +
+          '">' +
+          "<br>"
+      );
+      res.write('<label for="text">Comment:</label>');
+      res.write(
+        '<input type="text" id="text" name="text" value="' +
+          course.comments.id(comment_id).text +
+          '">' +
+          "<br>"
+      );
+      res.write('<input type="submit" value="Save Changes">');
+      res.write("</form>");
+      res.write(' <a href="/templates/homepage.html">[HOME]</a>' + "<br>");
+      res.write(
+        ' <a href="/templates/deleteComment/' +
+          courseNum +
+          "/" +
+          comment_id +
+          "/" +
+          '">[DELETE]</a>'
+      );
       res.end();
     }
   });
@@ -499,49 +606,69 @@ app.post("/editComment/:number/:comment_id", (req, res) => {
   var text = req.body.text;
   var rating = req.body.rating;
   var queryObject = { number: courseNum, "comments._id": comment_id };
-  if(Number(rating) < 0 || Number(rating) > 5){
+  if (Number(rating) < 0 || Number(rating) > 5) {
     res.type("html").status(200);
     console.log("error: " + err);
     res.write("Rating should be within the range (0,5): " + err);
-    res.write(' <a href="/editComment/'+courseNum+'/'+comment_id+'">[BACK]</a>');
-    res.end()
+    res.write(
+      ' <a href="/editComment/' + courseNum + "/" + comment_id + '">[BACK]</a>'
+    );
+    res.end();
   }
-  var action = { '$set': { comment_id_str: text, comment_rating_str:rating} };
+  var action = { $set: { comment_id_str: text, comment_rating_str: rating } };
   Course.find(queryObject, (err, courses) => {
     if (err) {
       res.type("html").status(200);
       console.log("error: " + err);
       res.write("edit comment failed: " + err);
-      res.write(' <a href="/editComment/'+courseNum+'/'+comment_id+'">[BACK]</a>');
+      res.write(
+        ' <a href="/editComment/' +
+          courseNum +
+          "/" +
+          comment_id +
+          '">[BACK]</a>'
+      );
       res.write(' <a href="/templates/homepage.html">[HOME]</a>');
-      res.end()
+      res.end();
     } else if (courses.length == 0) {
       console.log("course not found");
       res.type("html").status(200);
       res.write("Course/comment not found");
-      res.write(' <a href="/editComment/'+courseNum+'/'+comment_id+'">[BACK]</a>');
+      res.write(
+        ' <a href="/editComment/' +
+          courseNum +
+          "/" +
+          comment_id +
+          '">[BACK]</a>'
+      );
       res.write(' <a href="/templates/homepage.html">[HOME]</a>');
-      res.end()
+      res.end();
     } else {
-      var course = courses[0]
-      course.comments.id(comment_id).rating = Number(rating)
-      course.comments.id(comment_id).text = text
+      var course = courses[0];
+      course.comments.id(comment_id).rating = Number(rating);
+      course.comments.id(comment_id).text = text;
       course.save((err, c) => {
-        if(err){
+        if (err) {
           res.type("html").status(200);
           console.log("error: " + err);
           res.write("edit comment failed: " + err);
-          res.write(' <a href="/editComment/'+courseNum+'/'+comment_id+'">[BACK]</a>');
+          res.write(
+            ' <a href="/editComment/' +
+              courseNum +
+              "/" +
+              comment_id +
+              '">[BACK]</a>'
+          );
           res.write(' <a href="/templates/homepage.html">[HOME]</a>');
-          res.end()
+          res.end();
         } else {
           res.type("html").status(200);
           res.write("Edit success");
-          res.write(' <a href="/viewComments/'+courseNum+'">[BACK]</a>');
+          res.write(' <a href="/viewComments/' + courseNum + '">[BACK]</a>');
           res.write(' <a href="/templates/homepage.html">[HOME]</a>');
-          res.end()
+          res.end();
         }
-      })
+      });
     }
   });
 });
@@ -598,4 +725,67 @@ app.use("/", (req, res) => {
 
 app.listen(3000, () => {
   console.log("Listening on port 3000");
+});
+
+/***************************************/
+// endpoint for registering a user
+app.use("/register", async (req, res) => {
+  // retrieve the user data from the request body
+  const { username, email, password } = req.body;
+
+  // construct the User from the form data which is in the request body
+  var newUser = new User({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+  });
+
+  // save the user to the database
+  try {
+    const result = await newUser.save();
+    res.type("html").status(200);
+    res.write("sucessfully added " + newUser.name + " to the database");
+    res.end();
+    return;
+  } catch (err) {
+    res.type("html").status(200);
+    res.write("uh oh: " + err);
+    console.log(err);
+    res.end();
+  }
+});
+
+/***************************************/
+// endpoint for login
+app.use("/login", async (req, res) => {
+  // retrieve the user data from the request body
+  const { email, password } = req.body;
+  var queryObject = { email: email };
+
+  // find the user in the database
+  User.find(queryObject, (err, user) => {
+    if (err) {
+      res.type("html").status(200);
+      res.write("An error occured.");
+      res.end();
+    } else if (user.password != password) {
+      res.type("html").status(200);
+      res.write("Password Incorrect");
+      res.end();
+    }
+  });
+
+  // save the user to the database
+  try {
+    const result = await newUser.save();
+    res.type("html").status(200);
+    res.write("sucessfully added " + newUser.name + " to the database");
+    res.end();
+    return;
+  } catch (err) {
+    res.type("html").status(200);
+    res.write("uh oh: " + err);
+    console.log(err);
+    res.end();
+  }
 });
