@@ -5,67 +5,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Name"
-        tools:layout_editor_absoluteX="20dp"
-        tools:layout_editor_absoluteY="20dp" />
-
     <EditText
         android:id="@+id/name"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        tools:layout_editor_absoluteX="160dp"
-        tools:layout_editor_absoluteY="20dp" />
-
-    <TextView
-        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Number"
-        tools:layout_editor_absoluteX="20dp"
-        tools:layout_editor_absoluteY="60dp" />
+        android:inputType="text"
+        android:hint="Course Name" 
+        tools:layout_editor_absoluteX="160dp"
+        tools:layout_editor_absoluteY="20dp" />
 
     <EditText
         android:id="@+id/number"
-        android:layout_width="250dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="text"
+        android:hint="Course Number" 
         tools:layout_editor_absoluteX="160dp"
         tools:layout_editor_absoluteY="60dp" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Department"
-        tools:layout_editor_absoluteX="20dp"
-        tools:layout_editor_absoluteY="100dp" />
-
     <EditText
         android:id="@+id/department"
-        android:layout_width="250dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="text"
+        android:hint="Course Depertment" 
         tools:layout_editor_absoluteX="160dp"
         tools:layout_editor_absoluteY="100dp" />
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Professor"
-        tools:layout_editor_absoluteX="20dp"
-        tools:layout_editor_absoluteY="140dp" />
-
     <EditText
         android:id="@+id/professor"
-        android:layout_width="250dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="text"
+        android:hint="Professor"
         tools:layout_editor_absoluteX="160dp"
         tools:layout_editor_absoluteY="140dp" />
 
@@ -76,6 +48,15 @@
         android:onClick="onSearchButtonClick"
         android:text="Search"
         tools:layout_editor_absoluteX="20dp"
+        tools:layout_editor_absoluteY="180dp" />
+
+        <Button
+        android:id="@+id/nackButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onBackButtonClick"
+        android:text="Back"
+        tools:layout_editor_absoluteX="150dp"
         tools:layout_editor_absoluteY="180dp" />
 
     <Button

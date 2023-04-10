@@ -18,6 +18,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import javax.naming.directory.SearchControls;
+
 public class LoginPageActivity extends AppCompatActivity {
 
     String email = "";
@@ -39,4 +41,11 @@ public class LoginPageActivity extends AppCompatActivity {
         intent.putExtra("email", email);
         startActivity(intent);
     }
+
+    public void onToSearchButtonClick(View v){
+        Intent intent = new Intent(this, Search.class);
+        intent.putExtra("email", email);
+        startActivity(intent);
+    }
+
 }
