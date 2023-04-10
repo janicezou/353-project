@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class Search extends AppCompatActivity {
     EditText name,number,department,professor;
+    boolean alphabetically=false;
 
 
     @Override
@@ -56,7 +57,7 @@ public class Search extends AppCompatActivity {
         results.setText(String.valueOf(updateTxt));
 
     }
-}
+
     public void onSearchButtonClick(View v){
         // get json body object
 //        JSONObject jsonBody = updateSearch();
@@ -70,54 +71,53 @@ public class Search extends AppCompatActivity {
         try {
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.execute( () -> {
-                        try {
-                            // assumes that there is a server running on the AVD's host on port 3000
-                            // and that it has a /test endpoint that returns a JSON object with
-                            // a field called "message"
-                            String urlStr = "http://10.0.2.2:3000/searching?name="+nameS+"&number="+numS+"&department="+deptS+"&professor="+profS;
-                            // urlStr = urlStr + "name="+name+"&";
-                            URL url = new URL(urlStr);
+                try {
+                    // assumes that there is a server running on the AVD's host on port 3000
+                    // and that it has a /test endpoint that returns a JSON object with
+                    // a field called "message"
+                    String urlStr = "http://10.0.2.2:3000/searching?name="+nameS+"&number="+numS+"&department="+deptS+"&professor="+profS;
+                    if(alphabetically){
+                        urlStr += "&sort=name";
+                    }
+                    // urlStr = urlStr + "name="+name+"&";
+                    URL url = new URL(urlStr);
+                    // new SendDeviceDetails().execute("http://10.0.2.2:3000/search", jsonBody.toString());//?
 
-//                            new SendDeviceDetails().execute("http://10.0.2.2:3000/search", jsonBody.toString());//?
 
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.connect();
 
-                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                            conn.setRequestMethod("GET");
-                            conn.connect();
+                    Scanner in = new Scanner(url.openStream());
 
-                            Scanner in = new Scanner(url.openStream());
+                    while (in.hasNext()) {
+                        String line = in.nextLine();
+                        // the rest of this code assumes that the body contains JSON
+                        // first, create the parser
+                        JSONParser parser = new JSONParser();
 
-                            while (in.hasNext()) {
-                                String line = in.nextLine();
-                                // the rest of this code assumes that the body contains JSON
-                                // first, create the parser
-                                JSONParser parser = new JSONParser();
+                        // then, parse the data and create a JSON object for it
 
-                                // then, parse the data and create a JSON object for it
+                        JSONArray courseJA = (JSONArray) parser.parse(line);
 
-                                JSONArray courseJA = (JSONArray) parser.parse(line);
+                        Iterator courseIter = courseJA.iterator();
+                        while(productsIter.hasNext()){
+                            // create (Java) Product objects for each of the JSON objects
 
-                                Iterator courseIter = courseJA.iterator();
-                                while(productsIter.hasNext()){
-                                    // create (Java) Product objects for each of the JSON objects
-
-                                    JSONObject course = (JSONObject) courseIter.next();
-                                    courses.add(course);
-                            }
+                            JSONObject course = (JSONObject) courseIter.next();
+                            courses.add(course);
                         }
-                        catch (Exception e) {
+                    } 
+                } catch (Exception e) {
                             e.printStackTrace();
                             message = e.toString();
-                        }
-                    }
-            );
+                }
+            });
 
             executor.awaitTermination(2, TimeUnit.SECONDS);
             displayResponse(courses);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            tv.setText(e.toString());
         }
 
         // pass json body object
@@ -127,6 +127,9 @@ public class Search extends AppCompatActivity {
         // give list to new page
         // launch new page
         // display
+    }
+    public void onSortButtonClick(View v){
+        alphabetically = !alphabetically;
     }
     public void onBackButtonClick(View v){
         Intent i = new Intent();

@@ -78,6 +78,15 @@
         tools:layout_editor_absoluteX="20dp"
         tools:layout_editor_absoluteY="180dp" />
 
+    <Button
+        android:id="@+id/sortButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onSortButtonClick"
+        android:text="Search"
+        tools:layout_editor_absoluteX="320dp"
+        tools:layout_editor_absoluteY="180dp" />
+
     <TextView
         android:id="@+id/results"
         android:layout_width="400dp"
