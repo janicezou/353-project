@@ -57,7 +57,7 @@ app.use("/add", async (req, res) => {
 /**
  * User Story 1 & 2
  * Author: Quinn
- * Date modified: Mar 26, 2022
+ * Date modified: Mar 26, 2023
  * view all courses
  * navigate to a course
  */
@@ -190,7 +190,7 @@ app.use("/delete", async (req, res) => {
 /**
  * User Story 3
  * Author: Xinran
- * Date modified: Mar 19, 2022
+ * Date modified: Mar 19, 2023
  * edit information about a specific course
  * @Param number: the course number for the course (primary key)
  */
@@ -310,7 +310,7 @@ app.post("/edit/:number", (req, res) => {
 /**
  * User Story 3
  * Author: Xinran
- * Date modified: Mar 19, 2022
+ * Date modified: Mar 19, 2023
  * view the comments made about a specified course
  * @Param number: the course number for the course (primary key)
  */
@@ -370,72 +370,6 @@ app.get("/viewComments/:number", (req, res) => {
         res.write("</li>");
       });
       res.write("</ul>");
-      res.write(' <a href="/templates/homepage.html">[HOME]</a>');
-      res.end();
-    }
-  });
-});
-
-/**
- * Add a comment (for test purpose only)
- * Author: Xinran
- * Date Modified: Mar. 20, 2022
- * @param number: course number
- */
-
-app.get("/addComment/:number", (req, res) => {
-  var courseNum = req.params.number;
-  var queryObject = { number: courseNum };
-  Course.find(queryObject, (e, courses) => {
-    if (e) {
-      res.type("html").status(200);
-      res.write("Error " + e);
-      res.write(' <a href="/templates/homepage.html">[HOME]</a>');
-      res.end();
-    } else if (courses.length == 0) {
-      res.type("html").status(200);
-      res.write("Course not found");
-      res.write(' <a href="/templates/homepage.html">[HOME]</a>');
-      res.end();
-    } else {
-      var course = courses[0];
-      res.type("html").status(200);
-      res.write("Add comment for " + course.name);
-      res.write(
-        '<form id="add-comment-form" action = "/addComment/' +
-          courseNum +
-          '" method="post">'
-      );
-      res.write('<label for="rating">Rating:</label>');
-      res.write('<input type="text" id="rating" name="rating" value="">');
-      res.write('<label for="text">Comment:</label>');
-      res.write('<input type="text" id="text" name="text" value="">');
-      res.write('<input type="submit" value="Submit comment">');
-      res.write("</form>");
-      res.end();
-    }
-  });
-});
-
-app.post("/addComment/:number", (req, res) => {
-  var courseNum = req.params.number;
-  var queryObject = { number: courseNum };
-  var comment = req.body.text;
-  var rating = Number(req.body.rating);
-  console.log(req.body.text);
-  var commentObj = { author: "rand", rating: rating, text: comment };
-  var action = { $push: { comments: commentObj } };
-  Course.findOneAndUpdate(queryObject, action, (err, course) => {
-    if (err) {
-      res.type("html").status(200);
-      console.log("failed in adding comments");
-      res.write("Failed in adding comment for " + courseNum + ": " + err);
-      res.write(' <a href="/templates/homepage.html">[HOME]</a>');
-      res.end();
-    } else {
-      res.type("html").status(200);
-      console.log("succeeded in adding comments");
-      res.write("Sucessfully added comment for " + courseNum);
       res.write(' <a href="/templates/homepage.html">[HOME]</a>');
       res.end();
     }
@@ -569,7 +503,7 @@ app.use("/internalDelete", async (req, res) => {
 /**
  * User story 6
  * Author: Xinran
- * Date modified: Mar 19. 2022
+ * Date modified: Mar 19. 2023
  * Generate the form for edit information
  * @Param number: the course number for the course (primary key)
  * @Param _id: the id for the comment to be deleted or edited
@@ -634,7 +568,7 @@ app.get("/editComment/:number/:comment_id", (req, res) => {
 /**
  * User story 6
  * Author: Xinran
- * Date modified: Mar 19. 2022
+ * Date modified: Mar 19. 2023
  * edit the comment for a specific course
  * @Param number: the course number for the course (primary key)
  * @Param _id: the id for the comment to be deleted or edited
@@ -715,7 +649,7 @@ app.post("/editComment/:number/:comment_id", (req, res) => {
 /**
  * User story 6
  * Author: Xinran
- * Date modified: Mar 19. 2022
+ * Date modified: Mar 19. 2023
  * delete the comment for a specific course
  * @Param number: the course number for the course (primary key)
  * @Param comment_id: the id for the comment to edit
@@ -826,5 +760,80 @@ app.use("/login", async (req, res) => {
     res.write("uh oh: " + err);
     console.log(err);
     res.end();
+  }
+});
+
+/**
+ * User story 6: As a contributor, I can add a new course review to a known course.
+ * Author: Xinran
+ * Date Modified: Apr. 10, 2023
+ * @param number: course number
+ */
+app.use("/addComment/:number/:email", (req, res) => {
+  var courseNum = req.params.number;
+  var comment = req.body.text;
+  var rating = Number(req.body.rating);
+  var author = req.body.email;
+  var queryObject = { email: author };
+  var currUser;
+  // find the user in the database
+  User.find(queryObject, (err, user) => {
+    if(err){
+      console.log(e);
+    } else {
+      currUser = user[0];
+    }
+  });
+  queryObject = { number: courseNum };
+  var commentObj = { user: currUser, rating: rating, text: comment, courseNumber: courseNum};
+  var action = { $push: { comments: commentObj } };
+  Course.findOneAndUpdate(queryObject, action, (err, course) => {
+    if (err) {
+      res.type("html").status(200);
+      res.write("Error writing comment");
+      res.end();
+      return;
+    } else {
+      res.type("html").status(200);
+      res.write("sucessfully added comment for " + courseNum);
+      res.end();
+      return;
+    }
+  });
+});
+
+// User story 7: As a contributor, I can see my profile that has a list of all my comments. The comments are listed chronologically.
+app.use("/seeAllMyComments/:user_email", async (req, res) => {
+  var user_email = req.params.user_email;
+  var queryObject = { email: user_email };
+  var currUser;
+  var allComments = [];
+  // find the user in the database
+  User.find(queryObject, (err, user) => {
+    if(err){
+      console.log(e);
+    } else {
+      currUser = user[0];
+    }
+  });
+  queryObject = {comments:{$eleMatch: {user: currUser}}}
+  try{
+    const result = await Course.find(queryObject).sort({createdAt: -1});
+    if(result.length === 0){
+      res.send([{"status": "No results found"}])
+    } else {
+      result.forEach((comment) =>{
+        if(comment){
+          var timestamp = comment.createdAt
+          var text = comment.text
+          var rating = comment.rating
+          var courseNum = comment.courseNumber
+          allComments.push({"courseNum":courseNum, "timestamp": timestamp, "comment": text, "rating": rating})
+        }
+      });
+      res.send(allComments)
+    }
+  } catch (err) {
+    res.send([{"status": "Error"}])
   }
 });

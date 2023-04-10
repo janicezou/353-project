@@ -11,7 +11,6 @@ var userSchema = new mongoose.Schema({
   name: { type: String },
   email: { type: String },
   password: { type: String },
-  comments: [commentSchema],
 });
 
 // export userSchema as a class called User

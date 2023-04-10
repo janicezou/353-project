@@ -71,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (responseCode == 200) {
                         // login successful, go to login in page
                         Intent intent = new Intent(this, LoginPageActivity.class);
+                        intent.putExtra("email", email);
                         startActivity(intent);
                         finish();
                     }

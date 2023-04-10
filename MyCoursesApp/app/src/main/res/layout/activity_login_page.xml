@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="-49dp">
 
         <Button
             android:id="@+id/toSearchField"
@@ -15,9 +18,9 @@
             android:layout_marginTop="70dp"
             android:layout_marginBottom="70dp"
             android:background="@drawable/rounded_rectangle"
-            android:text="Course Search"
             android:gravity="center"
-            android:onClick="onToSearchButtonClick" />
+            android:onClick="onToSearchButtonClick"
+            android:text="Course Search" />
 
         <Button
             android:id="@+id/toAddCommentField"
@@ -25,9 +28,19 @@
             android:layout_height="70dp"
             android:layout_marginBottom="70dp"
             android:background="@drawable/rounded_rectangle"
-            android:text="Add Comment"
             android:gravity="center"
-            android:onClick="onToAddCommentButtonClick"/>
+            android:onClick="onAddCommentButtonClick"
+            android:text="Add Comment" />
+
+        <Button
+            android:id="@+id/viewAllComments"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginBottom="70dp"
+            android:background="@drawable/rounded_rectangle"
+            android:gravity="center"
+            android:onClick="onViewCommentButtonClick"
+            android:text="View My Comments" />
 
         <Button
             android:id="@+id/toMyProfileField"
@@ -35,17 +48,17 @@
             android:layout_height="70dp"
             android:layout_marginBottom="70dp"
             android:background="@drawable/rounded_rectangle"
-            android:text="My profile"
             android:gravity="center"
-            android:onClick="onToMyProfileButtonClick"/>
+            android:onClick="onToMyProfileButtonClick"
+            android:text="My profile" />
 
         <TextView
             android:id="@+id/statusField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
             android:gravity="center"
-            android:text="" />
+            android:text=""
+            android:textSize="30sp" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,7 +9,7 @@ var Schema = mongoose.Schema;
 var commentSchema = new Schema(
   {
     // an _id will be automatically created
-    author: { type: String },
+    courseNumber: {type: String},
     rating: { type: Number },
     text: { type: String },
     user: { type: Schema.Types.ObjectId, ref: "User" },
