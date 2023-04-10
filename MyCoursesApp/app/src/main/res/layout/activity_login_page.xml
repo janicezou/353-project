@@ -60,5 +60,15 @@
             android:text=""
             android:textSize="30sp" />
 
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:layout_marginBottom="70dp"
+            android:background="@drawable/rounded_rectangle"
+            android:gravity="center"
+            android:layout_gravity="end"
+            android:onClick="onLogoutButtonClick"
+            android:text="@string/to_log_out" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -29,72 +29,56 @@ import android.widget.Spinner;
 
 public class MainActivity extends AppCompatActivity {
 
+    protected String message;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
-
-    public void onToLogInButtonClick(View v) {
-        // create an intent to start the Signup Activity
-        Intent i = new Intent(this, LoginActivity.class);
-        startActivity(i);
-        // direct to sign up page
-    }
-
-    public void onToSignUpButtonClick(View v) {
-        // create an intent to start the Signup Activity
-        Intent i = new Intent(this, RegisterActivity.class);
-        startActivity(i);
-        // direct to sign up page
-    }
-
-    protected String message;
-
-    public void onConnectButtonClick(Button bv) {
-
         TextView tv = findViewById(R.id.statusField);
 
         try {
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.execute( () -> {
-                        try {
-                            // assumes that there is a server running on the AVD's host on port 3000
-                            // and that it has a /test endpoint that returns a JSON object with
-                            // a field called "message"
+                try {
+                    URL url = new URL("http://10.0.2.2:3000/test");
 
-                            URL url = new URL("http://10.0.2.2:3000/test");
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.connect();
 
-                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                            conn.setRequestMethod("GET");
-                            conn.connect();
+                    Scanner in = new Scanner(url.openStream());
+                    String response = in.nextLine();
 
-                            Scanner in = new Scanner(url.openStream());
-                            String response = in.nextLine();
+                    JSONObject jo = new JSONObject(response);
 
-                            JSONObject jo = new JSONObject(response);
+                    message = jo.getString("message");
 
-                            // need to set the instance variable in the Activity object
-                            // because we cannot directly access the TextView from here
-                            message = jo.getString("message");
-
-                        }
-                        catch (Exception e) {
-                            e.printStackTrace();
-                            message = e.toString();
-                        }
-                    }
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    message = e.toString();
+                }
+            }
             );
 
             executor.awaitTermination(2, TimeUnit.SECONDS);
-
-            bv.setBackgroundColor(Color.GREEN);
-            bv.setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.checkbox_on_background, 0, 0, 0);
             tv.setText(message);
         }
         catch (Exception e) {
             e.printStackTrace();
             tv.setText(e.toString());
         }
+    }
+
+    public void onToLogInButtonClick(View v) {
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
+        // direct to login page
+    }
+
+    public void onToSignUpButtonClick(View v) {
+        Intent i = new Intent(this, RegisterActivity.class);
+        startActivity(i);
+        // direct to sign up page
     }
 }

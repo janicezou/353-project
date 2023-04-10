@@ -2,5 +2,5 @@
     <string name="app_name">MyCoursesApp</string>
     <string name="to_log_in">Log In</string>
     <string name="to_sign_up">Sign Up</string>
-    <string name="logout_message">You are logged off.</string>
+    <string name="to_log_out">Logout</string>
 </resources>
