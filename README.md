@@ -21,3 +21,13 @@
 - /deleteComment/:number/:comment_id
 
 - - This path takes course number and comment_id and will delete the specific comment
+
+
+build
+    in Program Files\MongoDB\Server\6.0
+.\bin\mongod --dbpath db_directory
+
+    in 353-project/rate-my-course-app/
+node index.js
+
+...
