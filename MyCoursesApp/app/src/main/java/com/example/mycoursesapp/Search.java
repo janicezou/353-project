@@ -1,5 +1,8 @@
 package com.example.mycoursesapp;
 
+import android.widget.EditText;
+import android.widget.TextView;
+
 import java.util.concurrent.ConcurrentSkipListMap;
 
 import org.w3c.dom.css.Counter;
@@ -9,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class Search extends AppCompatActivity {
     EditText name,number,department,professor;
     boolean alphabetically=false;
-
+    Double averageRating;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +25,8 @@ public class Search extends AppCompatActivity {
         number = (EditText) findViewById(R.id.number);
         department = (EditText) findViewById(R.id.department);
         professor = (EditText) findViewById(R.id.professor);
+        AverageRating ar = new AverageRating();
+        averageRating = ar.getAverageRating(number.getText().toString());
 
     }
 
@@ -134,6 +139,8 @@ public class Search extends AppCompatActivity {
         }
         TextView results = findViewById(R.id.results);
         results.setText(String.valueOf(updateTxt));
+        TextView averageRatingView = findViewById(R.id.average_rating);
+        averageRatingView.setText(String.valueOf(averageRating));
 
     }
     

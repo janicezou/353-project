@@ -78,4 +78,10 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="250dp" />
 
+    <TextView
+        android:id="@+id/average_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Average Rating"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
