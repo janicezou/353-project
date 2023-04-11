@@ -1,5 +1,9 @@
 package com.example.mycoursesapp;
 
+import java.util.concurrent.ConcurrentSkipListMap;
+
+import org.w3c.dom.css.Counter;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Search extends AppCompatActivity {
@@ -46,6 +50,81 @@ public class Search extends AppCompatActivity {
         }
     }
 
+    private List<JSONObject> parseJSONtoList(String jsonStr){
+        ArrayList<JSONObject> courseList = new ArrayList<>();
+
+        if (jsonStr != null)
+        {
+            //---Parsing JSON---//
+            // ArrayList<Course> courseList = new ArrayList<>();
+            try
+            {
+ 
+                JSONArray jsonArray = new JSONArray(jsonStr);
+ 
+                for (int i = 0; i < jsonArray.length(); i++)
+                {
+                    //Create a temp course object
+                    // Course course = new Course();
+ 
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+ 
+                    //Get employee details
+                    // course.setName(jsonObject.getString("name"));
+                    // course.setNumber(jsonObject.getString("number"));
+ 
+                    //add to list
+                    // courseList.add(course);
+                    courseList.add(jsonObject);
+                }
+
+            } catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        return courseList;
+     
+    }
+
+/* 
+    private List<Course> parseJSONtoCourseList(String jsonStr){
+        ArrayList<Course> courseList = new ArrayList<>();
+
+
+        if (jsonStr != null){
+            //---Parsing JSON---//
+            try
+            {
+ 
+                JSONArray jsonArray = new JSONArray(jsonStr);
+ 
+                for (int i = 0; i < jsonArray.length(); i++)
+                {
+                    //Create a temp course object
+                    Course course = new Course();
+ 
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+ 
+                    //Get employee details
+                    course.setName(jsonObject.getString("name"));
+                    course.setNumber(jsonObject.getString("number"));
+ 
+                    //add to list
+                    courseList.add(course);
+                }
+
+            } catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        return courseList;
+     
+    }
+*/
     private void displayResponse(ArrayList<JSONObject> courses){
         String updateTxt="";
         for (JSONObject course : courses){
@@ -57,18 +136,18 @@ public class Search extends AppCompatActivity {
         results.setText(String.valueOf(updateTxt));
 
     }
-
-    public void onSearchButtonClick(View v){
-        // get json body object
-//        JSONObject jsonBody = updateSearch();
+    
+    
+    protected String getJSONStr(){
         String nameS = ((EditText) findViewById(R.id.name)).getText().toString();
         String numS = ((EditText) findViewById(R.id.number)).getText().toString();
         String deptS = ((EditText) findViewById(R.id.department)).getText().toString();
         String profS = ((EditText) findViewById(R.id.professor)).getText().toString();
-        ArrayList<JSONObject> courses;
 
-        // connect to search endpoint
-        try {
+        HttpURLConnection conn = null;
+        BufferedReader bufferedReader = null;
+ 
+        try{
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.execute( () -> {
                 try {
@@ -87,43 +166,54 @@ public class Search extends AppCompatActivity {
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("GET");
                     conn.connect();
-
-                    Scanner in = new Scanner(url.openStream());
-
-                    while (in.hasNext()) {
-                        String line = in.nextLine();
-                        // the rest of this code assumes that the body contains JSON
-                        // first, create the parser
-                        JSONParser parser = new JSONParser();
-
-                        // then, parse the data and create a JSON object for it
-
-                        JSONArray courseJA = (JSONArray) parser.parse(line);
-
-                        Iterator courseIter = courseJA.iterator();
-                        while(productsIter.hasNext()){
-                            // create (Java) Product objects for each of the JSON objects
-
-                            JSONObject course = (JSONObject) courseIter.next();
-                            courses.add(course);
-                        }
-                    } 
-                } catch (Exception e) {
-                            e.printStackTrace();
-                            message = e.toString();
+ 
+ 
+                    InputStream inputStream = conn.getInputStream();
+ 
+                    bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+ 
+                    StringBuffer stringBuffer = new StringBuffer();
+ 
+                    String line;
+ 
+                    while ((line = bufferedReader.readLine()) != null){
+                        stringBuffer.append(line).append("\n");
+                    }
+                    if (stringBuffer.length() == 0){return null;} 
+                    else{return stringBuffer.toString();}
+                }catch(JSONException e){
+                    return null;
                 }
             });
-
             executor.awaitTermination(2, TimeUnit.SECONDS);
-            displayResponse(courses);
-        } catch (Exception e) {
-            e.printStackTrace();
+            
+        } catch (IOException e){return null;} 
+        finally{
+            if (conn != null){
+                conn.disconnect();
+            }
+            if (bufferedReader != null){
+                try{
+                    bufferedReader.close();
+                } catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
         }
+    }
 
+    public void onSearchButtonClick(View v){
+        // get json body object
+        // JSONObject jsonBody = updateSearch();
         // pass json body object
         // get json response
 
+        // parse json response into string
+        String jsonStr = getJSONStr();
         // parse json response into list
+        List<JSONObject> courses = parseJSONtoList(jsonStr);;
+        // update visuals
+        displayResponse(courses);
         // give list to new page
         // launch new page
         // display
