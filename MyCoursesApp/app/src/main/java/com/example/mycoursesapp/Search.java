@@ -142,10 +142,10 @@ public class Search extends AppCompatActivity {
         // get json response
 
         // parse json response into string
-//        ArrayList<JSONObject> courses = getJSON();
+       ArrayList<JSONObject> courses = getJSON();
         // parse json response into list
         // update visuals
-        displayResponse(getJSON());
+        displayResponse(courses);
 
         // give list to new page
         // launch new page

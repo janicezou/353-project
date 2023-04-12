@@ -461,12 +461,12 @@ app.get("/searching", async (req, res) => {
   // res.send(filter);
   // find filtered Course objects in the database
   try {
-    const result = null;
-    if (req.query.sort.equalsIgnoreCase("name")) {
-      const result = await Course.find(filter).sort({ name: "asc" });
-    } else {
-      const result = await Course.find(filter).sort({ rating: "asc" });
-    }
+    const result = await Course.find(filter).sort({ rating: "asc" });
+    // if ((req.query.sort).equals("name")) {
+    //   result.sort({ name: "asc" });
+    // } else {
+    //   result.sort({ rating: "asc" });
+    // }
     console.log(result);
     res.type("html").status(200);
     res.json(result);
