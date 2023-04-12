@@ -13,36 +13,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:hint="Course Name" 
-        tools:layout_editor_absoluteX="160dp"
-        tools:layout_editor_absoluteY="20dp" />
+        android:hint="Course Name" />
 
     <EditText
         android:id="@+id/number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:hint="Course Number" 
-        tools:layout_editor_absoluteX="160dp"
-        tools:layout_editor_absoluteY="60dp" />
+        android:hint="Course Number"  />
 
     <EditText
         android:id="@+id/department"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:hint="Course Depertment" 
-        tools:layout_editor_absoluteX="160dp"
-        tools:layout_editor_absoluteY="100dp" />
+        android:hint="Course Depertment"  />
 
     <EditText
         android:id="@+id/professor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:hint="Professor"
-        tools:layout_editor_absoluteX="160dp"
-        tools:layout_editor_absoluteY="140dp" />
+        android:hint="Professor" />
 
     <Button
         android:id="@+id/searchButton"
@@ -54,22 +46,18 @@
         tools:layout_editor_absoluteY="180dp" />
 
         <Button
-        android:id="@+id/nackButton"
+        android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onBackButtonClick"
-        android:text="Back"
-        tools:layout_editor_absoluteX="150dp"
-        tools:layout_editor_absoluteY="180dp" />
+        android:text="Back" />
 
     <Button
         android:id="@+id/sortButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onSortButtonClick"
-        android:text="Sort"
-        tools:layout_editor_absoluteX="320dp"
-        tools:layout_editor_absoluteY="180dp" />
+        android:text="Sort"/>
 
     <TextView
         android:id="@+id/results"
@@ -79,17 +67,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="250dp" />
+        />
 
     <TextView
         android:id="@+id/average_rating"
         android:layout_width="400dp"
-        android:layout_height="500dp"
+        android:layout_height="400dp"
         android:text="Average Rating"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="250dp"/>
+        />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
