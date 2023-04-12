@@ -871,29 +871,25 @@ app.use("/allUser", (req, res) => {
   User.find({}, (err, allCourses) => {
     if (err) {
       res.type("html").status(200);
-      res.write("An error occured. Could not find any course.");
+      res.write("An error occured. Could not find any users.");
       res.write(' <a href="/templates/homepage.html">[HOME]</a>');
       res.end();
       return;
     } else if (allCourses.length == 0) {
       res.type("html").status(200);
-      res.write("There are no courses.");
+      res.write("There are no user.");
       res.write(' <a href="/templates/homepage.html">[HOME]</a>');
       res.end();
       return;
     } else {
       res.type("html").status(200);
-      res.write("There are " + allCourses.length + " courses in the database.");
+      res.write("There are " + allCourses.length + " users in the database.");
       res.write("<ul>");
       allCourses.forEach((course) => {
         res.write("<li>");
         if (course) {
           res.write(
-            '<a href="/viewCourse/' +
-              course.email +
-              '">' +
-              course.name +
-              "</a><br>"
+            '<li>' + course.email + '</li>'
           );
         }
         res.write("</li>");
