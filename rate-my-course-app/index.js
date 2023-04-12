@@ -340,9 +340,9 @@ app.get("/viewComments/:number", (req, res) => {
       );
       res.write("<ul>");
       // show all the comments
-      let average_rating = 0;
+      var average_rating = 0;
       comments.forEach((comment) => {
-        average_rating += comment.rating;
+        average_rating += Number(comment.rating);
         res.write("<li>");
         res.write("ID: " + comment._id);
         res.write("<ul>");
@@ -375,7 +375,7 @@ app.get("/viewComments/:number", (req, res) => {
         res.write("</li>");
       });
       res.write("</ul>");
-      // res.write("Average Rating: ", average_rating/comments.length)
+      res.write("Average Rating: " + average_rating/comments.length)
       res.write(' <a href="/templates/homepage.html">[HOME]</a>');
       res.end();
     }
