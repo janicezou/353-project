@@ -1,7 +1,5 @@
 package com.example.mycoursesapp;
 
-import android.os.Bundle;
-
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
@@ -11,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class AverageRating {
-    Double averageRating;
+    private Double averageRating;
 
     protected Double getAverageRating(String courseNum) {
         try {
@@ -37,12 +35,13 @@ public class AverageRating {
                             Matcher m = p.matcher(line);
                             Integer index = null;
                             while (m.find()) {
-                                index = m.start() + pattern.length() + 2;
+                                index = m.start() + pattern.length();
                             }
                             if (index != null) {
-                                String result = line.substring(index, index + 4);
+                                String r = line.substring(index);
+                                String result = r.substring(0, 1);
                                 try {
-                                    averageRating = Double.parseDouble(result);
+                                    averageRating = Integer.parseInt(result)*1.0;
                                 } catch (NumberFormatException nfe) {
                                     nfe.printStackTrace();
                                 }
@@ -57,6 +56,8 @@ public class AverageRating {
         } catch(Exception ee) {
             ee.printStackTrace();
         }
+        System.out.println("returning averageRating: " + averageRating);
         return averageRating;
     }
+
 }

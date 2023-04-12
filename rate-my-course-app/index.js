@@ -375,7 +375,7 @@ app.get("/viewComments/:number", (req, res) => {
         res.write("</li>");
       });
       res.write("</ul>");
-      res.write("Average Rating: " + average_rating/comments.length)
+      res.write("Average Rating: " + (average_rating/comments.length).toString())
       res.write(' <a href="/templates/homepage.html">[HOME]</a>');
       res.end();
     }

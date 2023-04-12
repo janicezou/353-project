@@ -46,11 +46,20 @@
             android:id="@+id/toMyProfileField"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:layout_marginBottom="70dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/rounded_rectangle"
             android:gravity="center"
             android:onClick="onToMyProfileButtonClick"
             android:text="My profile" />
+
+        <Button
+            android:id="@+id/toLogout"
+            android:layout_width="100dp"
+            android:layout_height="48dp"
+            android:background="@drawable/rounded_rectangle"
+            android:gravity="center"
+            android:onClick="onLogoutButtonClick"
+            android:text="@string/to_log_out" />
 
         <TextView
             android:id="@+id/statusField"
@@ -59,16 +68,6 @@
             android:gravity="center"
             android:text=""
             android:textSize="30sp" />
-
-        <Button
-            android:layout_width="100dp"
-            android:layout_height="70dp"
-            android:layout_marginBottom="70dp"
-            android:background="@drawable/rounded_rectangle"
-            android:gravity="center"
-            android:layout_gravity="end"
-            android:onClick="onLogoutButtonClick"
-            android:text="@string/to_log_out" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
