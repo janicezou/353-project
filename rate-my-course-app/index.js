@@ -444,7 +444,7 @@ app.use("/search", async (req, res) => {
   }
 });
 
-app.use("/searching", async (req, res) => {
+app.get("/searching", async (req, res) => {
   var filter = {};
   if (req.query.name) {
     filter.name = req.query.name;
