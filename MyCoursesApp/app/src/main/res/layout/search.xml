@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
     <EditText
         android:id="@+id/name"
         android:layout_width="wrap_content"
@@ -64,7 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onSortButtonClick"
-        android:text="Search"
+        android:text="Sort"
         tools:layout_editor_absoluteX="320dp"
         tools:layout_editor_absoluteY="180dp" />
 
@@ -83,5 +86,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Average Rating"/>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
