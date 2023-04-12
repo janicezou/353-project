@@ -37,8 +37,8 @@ public class Search extends AppCompatActivity {
         number = (EditText) findViewById(R.id.number);
         department = (EditText) findViewById(R.id.department);
         professor = (EditText) findViewById(R.id.professor);
-        // AverageRating ar = new AverageRating();
-        // averageRating = ar.getAverageRating(number.getText().toString());
+         AverageRating ar = new AverageRating();
+         averageRating = ar.getAverageRating(number.getText().toString());
 
     }
 
@@ -65,7 +65,8 @@ public class Search extends AppCompatActivity {
         TextView results = findViewById(R.id.results);
         results.setText(String.valueOf(updateTxt));
         TextView averageRatingView = findViewById(R.id.average_rating);
-        averageRatingView.setText(String.valueOf(averageRating));
+        String avgRatingText = "Average Rating: " + averageRating.toString();
+        averageRatingView.setText(avgRatingText);
 
     }
 

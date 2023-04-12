@@ -22,7 +22,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".LogoutActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".LoginPageActivity" />
         <activity android:name=".AddComments" />

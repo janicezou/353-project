@@ -34,8 +34,7 @@ public class LoginPageActivity extends AppCompatActivity {
    }
 
     public void onLogoutButtonClick(View v) {
-        Intent intent = new Intent(this, LogoutActivity.class);
-        intent.putExtra("email", email);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 
