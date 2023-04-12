@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 public class Search extends AppCompatActivity {
     EditText name,number,department,professor;
     boolean alphabetically=false;
-    Double averageRating;
+    Double averageRating = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,36 +37,43 @@ public class Search extends AppCompatActivity {
         number = (EditText) findViewById(R.id.number);
         department = (EditText) findViewById(R.id.department);
         professor = (EditText) findViewById(R.id.professor);
-         AverageRating ar = new AverageRating();
-         averageRating = ar.getAverageRating(number.getText().toString());
+//        AverageRating ar = new AverageRating();
+//        averageRating = ar.getAverageRating(number.getText().toString());
 
     }
 
     private void displayResponse(List<JSONObject> courses) {
         String updateTxt="";
+        averageRating = 0.0;
+        AverageRating ar = new AverageRating();
 
         if(courses == null || courses.size() ==0){
-            updateTxt="no resutls found";
+            updateTxt="no results found";
         } else{
             for (JSONObject course : courses){
                 String _name = null;
                 String _number = null;
+                Double _rating = 0.0;
                 try {
                     _name = (String) course.get("name");
                     _number = (String) course.get("number");
+                    _rating = ar.getAverageRating(_number);
+//                    averageRating += _rating;
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
 
-                updateTxt += "Course Name: "+_name+"; Course Number: "+_number+"\n";
+                updateTxt += "Course Name: "+_name+"; Course Number: "+_number+"; Rating: "+_rating+"\n";
             }
         }
+//        averageRating = averageRating/courses.size();
+
+//        updateTxt = averageRating + "\n" + updateTxt;
 
         TextView results = findViewById(R.id.results);
         results.setText(String.valueOf(updateTxt));
-        TextView averageRatingView = findViewById(R.id.average_rating);
-        String avgRatingText = "Average Rating: " + averageRating.toString();
-        averageRatingView.setText(avgRatingText);
+        // TextView averageRatingView = findViewById(R.id.average_rating);
+        // averageRatingView.setText(String.valueOf(averageRating));
 
     }
 
