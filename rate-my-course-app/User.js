@@ -8,10 +8,12 @@ var Schema = mongoose.Schema;
 const { commentSchema } = require("./Course");
 
 var userSchema = new mongoose.Schema({
+  email: { type: String, required: true, unique: true, index: true },
   name: { type: String },
-  email: { type: String },
   password: { type: String },
 });
+
+userSchema.set("primaryKey", "email");
 
 // export userSchema as a class called User
 module.exports = mongoose.model("User", userSchema);

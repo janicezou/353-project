@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONObject;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
@@ -54,26 +56,29 @@ public class LoginActivity extends AppCompatActivity {
 //                    os.write(jo.toString().getBytes());
 //                    os.flush();
 
-                    if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                        throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
-                    }
+//                    if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+//                        throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+//                    }
 
                     Scanner in = new Scanner(conn.getInputStream());
                     String response = in.nextLine();
-                    message = response;
+                    JSONObject json = new JSONObject(response);
+                    message = json.getString("message");
 
-                    int responseCode = conn.getResponseCode();
-                    if (responseCode == 200) {
+                    if (conn.getResponseCode() == 200) {
                         // login successful, go to login in page
                         Intent intent = new Intent(this, LoginPageActivity.class);
                         intent.putExtra("email", email);
                         startActivity(intent);
                         finish();
+                    } else {
+                        // login failed, show error message
+                        tv.setText(message);
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    message = e.toString();
+                    message = "No user or Password is incorrect";
                 }
             });
 

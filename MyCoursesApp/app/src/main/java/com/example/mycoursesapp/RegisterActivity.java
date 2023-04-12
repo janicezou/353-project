@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONObject;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
@@ -67,13 +69,24 @@ public class RegisterActivity extends AppCompatActivity {
 //                            os.write(jo.toString().getBytes());
 //                            os.flush();
 
-                            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                                throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
-                            }
+//                            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+//                                throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+//                            }
 
                             Scanner in = new Scanner(conn.getInputStream());
                             String response = in.nextLine();
-                            message = response;
+                            JSONObject json = new JSONObject(response);
+                            message = json.getString("message");
+
+                            if (conn.getResponseCode() == 200) {
+                                // sign up successful, go to main page
+                                Intent intent = new Intent(this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                // sign up failed, show error message
+                                tv.setText(message);
+                            }
 
                         }
                         catch (Exception e) {
@@ -88,12 +101,6 @@ public class RegisterActivity extends AppCompatActivity {
             // but it should be okay for our purposes (and is a lot easier)
             executor.awaitTermination(2, TimeUnit.SECONDS);
             tv.setText(message);
-
-            // now we can go back to the main page
-            // create an intent to start the Main Activity
-            Intent i = new Intent(this, MainActivity.class);
-            startActivity(i);
-            // direct to main page
         }
         catch (Exception e) {
             // uh oh
