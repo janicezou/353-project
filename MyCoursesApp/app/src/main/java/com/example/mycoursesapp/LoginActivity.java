@@ -3,16 +3,11 @@ package com.example.mycoursesapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.json.JSONObject;
-
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
@@ -45,19 +40,19 @@ public class LoginActivity extends AppCompatActivity {
                     // assumes that there is a server running on the AVD's host on port 3000
                     // and that it has a /login endpoint
 
-                    URL url = new URL("http://10.0.2.2:3000/login");
+                    URL url = new URL("http://10.0.2.2:3000/login?email="+email+"&password="+password);
 
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("POST");
+                    conn.setRequestMethod("GET");
                     conn.connect();
 
-                    JSONObject jo = new JSONObject();
-                    jo.put("email", email);
-                    jo.put("password", password);
-
-                    OutputStream os = conn.getOutputStream();
-                    os.write(jo.toString().getBytes());
-                    os.flush();
+//                    JSONObject jo = new JSONObject();
+//                    jo.put("email", email);
+//                    jo.put("password", password);
+//
+//                    OutputStream os = conn.getOutputStream();
+//                    os.write(jo.toString().getBytes());
+//                    os.flush();
 
                     if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
                         throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());

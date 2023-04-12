@@ -22,7 +22,7 @@ public class CustomBaseAdapter extends BaseAdapter {
         this.ratings = ratings;
         this.comments = comments;
         this.timestamps = timestamp;
-        inflater = LayoutInflater.from(ctx);
+        inflater = (LayoutInflater.from(ctx));
     }
 
     @Override
@@ -48,10 +48,10 @@ public class CustomBaseAdapter extends BaseAdapter {
         TextView rating = (TextView) view.findViewById(R.id.comment_rating);
         TextView text = (TextView) view.findViewById(R.id.comment_text);
 
-        courseNum.setText(courseNumers[i]);
-        timestamp.setText(timestamps[i]);
-        rating.setText(ratings[i]);
-        text.setText(comments[i]);
-        return null;
+        courseNum.setText("Course Number: " + courseNumers[i]);
+        timestamp.setText("Timestamp: " + timestamps[i]);
+        rating.setText("Rating: " + ratings[i]);
+        text.setText("Comment: " + comments[i]);
+        return view;
     }
 }

@@ -9,12 +9,33 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <Button
+            android:id="@+id/viewAllCommentsBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:onClick="onViewCommentBackButtonClick" />
 
-        <ListView
-            android:layout_height="match_parent"
+
+        <TextView
+            android:id="@+id/allcomments_statusField"
             android:layout_width="match_parent"
-            android:id="@+id/listComments" />
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:text="" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ListView
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:id="@+id/listComments" />
+
+        </LinearLayout>
     </LinearLayout>
 
     <!--    <TextView-->

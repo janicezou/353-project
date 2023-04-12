@@ -12,7 +12,7 @@ var commentSchema = new Schema(
     courseNumber: {type: String},
     rating: { type: Number },
     text: { type: String },
-    user: { type: Schema.Types.ObjectId, ref: "User" },
+    user: { type: String},
   },
   { timestamps: true }
 );
@@ -30,8 +30,4 @@ var courseSchema = new Schema({
 
 // export courseSchema as a class called Course
 // and export coomentSchema as a class called Comment
-module.exports = {
-  Course: mongoose.model("Course", courseSchema),
-  Comment: mongoose.model("Comment", commentSchema),
-  commentSchema: commentSchema,
-};
+module.exports = mongoose.model("Course", courseSchema);

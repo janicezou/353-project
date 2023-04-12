@@ -1,12 +1,15 @@
 package com.example.mycoursesapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.json.simple.*;
-import org.json.simple.parser.JSONParser;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -25,72 +28,54 @@ public class ViewComments extends AppCompatActivity {
         setContentView(R.layout.activity_check_all_comment);
         listView = (ListView) findViewById(R.id.listComments);
 
+        TextView tv = findViewById(R.id.allcomments_statusField);
+
         try {
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.execute( () -> {
                 try {
-                    Scanner in = null;
+
                     // assumes that there is a server running on the AVD's host on port 3000
                     // and that it has a /login endpoint
                     String url_string = "http://10.0.2.2:3000/seeAllMyComments/" + email;
                     URL url = new URL(url_string);
 
-                    String[] comments;
-                    String[] ratings;
-                    String[] timestampes;
-                    String[] courseNumbers;
 
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("GET");
                     conn.connect();
 
-                    in = new Scanner(url.openStream());
-
-                    while (in.hasNext()) {
+                    Scanner in = new Scanner(conn.getInputStream());
                         String line = in.nextLine();
-
-                        JSONParser parser = new JSONParser();
-
-                        // then, parse the data and create a JSON Array for it
-                        Object dataobj = parser.parse(line);
-
-                        JSONArray data = (JSONArray) dataobj;
+                        System.out.println(line);
+                        JSONArray data = new JSONArray(line);
                         /**
                          * handle the case when JSONArray is empty
                          */
-                        if (data.size() == 0) {
-                            courseNumbers = new String[1];
-                            courseNumbers[0] = "Temp course";
-                            ratings = new String[1];
-                            ratings[0] = "Temp ratings";
-                            comments = new String[1];
-                            comments[0] = "Temp comment";
-                            timestampes = new String[1];
-                            timestampes[0] = "Temp timestampes";
-                            CustomBaseAdapter customBaseAdapter = new CustomBaseAdapter(getApplicationContext(), courseNumbers, ratings, comments, timestampes);
-                            listView.setAdapter(customBaseAdapter);
+                        if (data.length() == 0) {
+                            tv.setText("No comments");
+                            System.out.println("No comments");
                         } else {
-                            courseNumbers = new String[data.size()];
-                            ratings = new String[data.size()];
-                            comments = new String[data.size()];
-                            timestampes = new String[data.size()];
-                            int index = 0;
-                            for (Object datus : data) {
-                                JSONObject datusobj = (JSONObject) datus;
+                            String[] courseNumbers = new String[data.length()];
+                            String[] ratings = new String[data.length()];
+                            String[] comments = new String[data.length()];
+                            String[] timestampes = new String[data.length()];
+                            for (int i = 0; i < data.length(); i++) {
+                                System.out.println("Start");
+                                JSONObject datusobj = data.getJSONObject(i);
                                 String cn = (String) datusobj.get("courseNum");
                                 String ts = (String) datusobj.get("timestamp");
-                                String r = (String) datusobj.get("rating");
+                                int r_int = (int) datusobj.get("rating");
+                                String r = Integer.toString(r_int);
                                 String t = (String) datusobj.get("comment");
-                                courseNumbers[index] = cn;
-                                ratings[index] = r;
-                                comments[index] = t;
-                                timestampes[index] = ts;
-                                index++;
+                                courseNumbers[i] = cn;
+                                ratings[i] = r;
+                                comments[i] = t;
+                                timestampes[i] = ts;
                             }
                             CustomBaseAdapter customBaseAdapter = new CustomBaseAdapter(getApplicationContext(), courseNumbers, ratings, comments, timestampes);
                             listView.setAdapter(customBaseAdapter);
                         }
-                    }
                     } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -102,12 +87,17 @@ public class ViewComments extends AppCompatActivity {
             executor.awaitTermination(2, TimeUnit.SECONDS);
 
             // now we can set the status in the TextView
-            tv.setText(message);
 
         } catch (Exception e) {
             e.printStackTrace();
-            message = e.toString();
-            tv.setText(message);
         }
+    }
+
+    public void onViewCommentBackButtonClick(View v) {
+        // create an intent to start the Main Activity
+        Intent i = new Intent(this, LoginPageActivity.class);
+        i.putExtra("email", email);
+        startActivity(i);
+        // direct to main page
     }
 }

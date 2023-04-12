@@ -353,6 +353,9 @@ app.get("/viewComments/:number", (req, res) => {
         res.write("Comment: " + comment.text);
         res.write("</li>");
         res.write("<li>");
+        res.write("User: " + comment.user);
+        res.write("</li>");
+        res.write("<li>");
         res.write(
           ' <a href="/deleteComment/' +
             courseNum +
@@ -367,12 +370,12 @@ app.get("/viewComments/:number", (req, res) => {
             comment._id +
             '">[EDIT]</a>'
         );
-        res.write("<li>");
+        res.write("</li>");
         res.write("</ul>");
         res.write("</li>");
       });
       res.write("</ul>");
-      res.write("Average Rating: ", average_rating/comments.length)
+      // res.write("Average Rating: ", average_rating/comments.length)
       res.write(' <a href="/templates/homepage.html">[HOME]</a>');
       res.end();
     }
@@ -695,9 +698,7 @@ app.get("/deleteComment/:number/:comment_id", (req, res) => {
 
 app.use("/templates", express.static("templates"));
 
-app.use("/", (req, res) => {
-  res.redirect("/templates/homepage.html");
-});
+
 
 app.listen(3000, () => {
   console.log("Listening on port 3000");
@@ -707,13 +708,12 @@ app.listen(3000, () => {
 // endpoint for registering a user
 app.use("/register", async (req, res) => {
   // retrieve the user data from the request body
-  const { username, email, password } = req.body;
 
   // construct the User from the form data which is in the request body
   var newUser = new User({
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password,
+    name: req.query.name,
+    email: req.query.email,
+    password: req.query.password,
   });
 
   // save the user to the database
@@ -735,7 +735,8 @@ app.use("/register", async (req, res) => {
 // endpoint for login
 app.use("/login", async (req, res) => {
   // retrieve the user data from the request body
-  const { email, password } = req.body;
+  var email = req.query.email;
+  var password = req.query.password;
   var queryObject = { email: email };
 
   // find the user in the database
@@ -748,22 +749,26 @@ app.use("/login", async (req, res) => {
       res.type("html").status(200);
       res.write("Password Incorrect");
       res.end();
+    } else {
+      res.type("html").status(200);
+      res.write("Login Success");
+      res.end();
     }
   });
 
-  // save the user to the database
-  try {
-    const result = await newUser.save();
-    res.type("html").status(200);
-    res.write("sucessfully added " + newUser.name + " to the database");
-    res.end();
-    return;
-  } catch (err) {
-    res.type("html").status(200);
-    res.write("uh oh: " + err);
-    console.log(err);
-    res.end();
-  }
+  // // save the user to the database
+  // try {
+  //   const result = await newUser.save();
+  //   res.type("html").status(200);
+  //   res.write("sucessfully added " + newUser.name + " to the database");
+  //   res.end();
+  //   return;
+  // } catch (err) {
+  //   res.type("html").status(200);
+  //   res.write("uh oh: " + err);
+  //   console.log(err);
+  //   res.end();
+  // }
 });
 
 /**
@@ -772,34 +777,44 @@ app.use("/login", async (req, res) => {
  * Date Modified: Apr. 10, 2023
  * @param number: course number
  */
-app.use("/addComment/:number/:email", (req, res) => {
+app.use("/addComment/:number", (req, res) => {
+  console.log("called");
+  var text = req.query.text
+  var rating = Number(req.query.rating)
+  var email = req.query.email
   var courseNum = req.params.number;
-  var comment = req.body.text;
-  var rating = Number(req.body.rating);
-  var author = req.body.email;
-  var queryObject = { email: author };
-  var currUser;
+  var queryObject = { email: email };
+
   // find the user in the database
   User.find(queryObject, (err, user) => {
     if(err){
       console.log(e);
+      return;
     } else {
-      currUser = user[0];
+      if(user.length===0){
+        console.log("not found")
+        res.type("html").status(200);
+        res.send("User Not Found");
+        res.end()
+        return
+      }
     }
   });
   queryObject = { number: courseNum };
-  var commentObj = { user: currUser, rating: rating, text: comment, courseNumber: courseNum};
+  var commentObj = { user: email, rating: rating, text: text, courseNumber: courseNum};
   var action = { $push: { comments: commentObj } };
   Course.findOneAndUpdate(queryObject, action, (err, course) => {
     if (err) {
       res.type("html").status(200);
-      res.write("Error writing comment");
-      res.end();
+      res.send("Error writing comment");
+      res.end()
+      console.log(err)
       return;
     } else {
       res.type("html").status(200);
-      res.write("sucessfully added comment for " + courseNum);
-      res.end();
+      res.send("sucessfully added comment for " + courseNum);
+      console.log("success")
+      res.end()
       return;
     }
   });
@@ -809,34 +824,74 @@ app.use("/addComment/:number/:email", (req, res) => {
 app.use("/seeAllMyComments/:user_email", async (req, res) => {
   var user_email = req.params.user_email;
   var queryObject = { email: user_email };
-  var currUser;
   var allComments = [];
-  // find the user in the database
-  User.find(queryObject, (err, user) => {
-    if(err){
-      console.log(e);
-    } else {
-      currUser = user[0];
-    }
-  });
-  queryObject = {comments:{$eleMatch: {user: currUser}}}
+  queryObject = {"comments.user": user_email}
   try{
     const result = await Course.find(queryObject).sort({createdAt: -1});
     if(result.length === 0){
       res.send([{"status": "No results found"}])
+      return;
     } else {
-      result.forEach((comment) =>{
-        if(comment){
-          var timestamp = comment.createdAt
-          var text = comment.text
-          var rating = comment.rating
-          var courseNum = comment.courseNumber
-          allComments.push({"courseNum":courseNum, "timestamp": timestamp, "comment": text, "rating": rating})
-        }
+      result.forEach((course) =>{
+        course.comments.forEach((comment)=>{
+          if(comment){
+            if(comment.user === user_email){
+              var timestamp = comment.createdAt
+              var text = comment.text
+              var rating = comment.rating
+              var courseNum = comment.courseNumber
+              allComments.push({"courseNum":courseNum, "timestamp": timestamp, "comment": text, "rating": rating})
+            }
+          }
+        })
+
       });
+      console.log(allComments);
       res.send(allComments)
     }
   } catch (err) {
+    console.log(err)
     res.send([{"status": "Error"}])
   }
+});
+
+app.use("/allUser", (req, res) => {
+  User.find({}, (err, allCourses) => {
+    if (err) {
+      res.type("html").status(200);
+      res.write("An error occured. Could not find any course.");
+      res.write(' <a href="/templates/homepage.html">[HOME]</a>');
+      res.end();
+      return;
+    } else if (allCourses.length == 0) {
+      res.type("html").status(200);
+      res.write("There are no courses.");
+      res.write(' <a href="/templates/homepage.html">[HOME]</a>');
+      res.end();
+      return;
+    } else {
+      res.type("html").status(200);
+      res.write("There are " + allCourses.length + " courses in the database.");
+      res.write("<ul>");
+      allCourses.forEach((course) => {
+        res.write("<li>");
+        if (course) {
+          res.write(
+            '<a href="/viewCourse/' +
+              course.email +
+              '">' +
+              course.name +
+              "</a><br>"
+          );
+        }
+        res.write("</li>");
+      });
+      res.write("</li>");
+      res.end();
+    }
+  }).sort({ number: "asc" });
+});
+
+app.use("/", (req, res) => {
+  res.redirect("/templates/homepage.html");
 });

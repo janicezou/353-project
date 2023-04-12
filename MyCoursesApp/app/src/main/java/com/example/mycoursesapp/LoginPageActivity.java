@@ -28,11 +28,11 @@ public class LoginPageActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onToSearchButtonClick(View v){
-        Intent intent = new Intent(this, Search.class);
-        intent.putExtra("email", email);
-        startActivity(intent);
-    }
+//    public void onToSearchButtonClick(View v){
+//        Intent intent = new Intent(this, Search.class);
+//        intent.putExtra("email", email);
+//        startActivity(intent);
+//    }
 
     public void onLogoutButtonClick(View v) {
         Intent intent = new Intent(this, LogoutActivity.class);
