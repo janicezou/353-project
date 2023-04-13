@@ -17,6 +17,7 @@ var User = require("./User.js");
 // this is the action of the "add new course" form
 app.use("/add", async (req, res) => {
   // construct the Course from the form data which is in the request body
+  var average_rating = 0.0;
   var newCourse = new Course({
     name: req.body.name,
     number: req.body.number,
@@ -24,7 +25,7 @@ app.use("/add", async (req, res) => {
     department: req.body.department,
     school: req.body.school,
     description: req.body.description,
-    rating: req.body.rating,
+    rating: average_rating,
   });
 
   // save the course to the database
@@ -375,12 +376,41 @@ app.get("/viewComments/:number", (req, res) => {
         res.write("</li>");
       });
       res.write("</ul>");
-      res.write("Average Rating: " + (average_rating/comments.length).toString())
+      average_rating = average_rating/comments.length;
+      singleCourse.rating = average_rating;
+      res.write("Average Rating: " + (average_rating).toString())
       res.write(' <a href="/templates/homepage.html">[HOME]</a>');
       res.end();
     }
   });
 });
+
+
+
+function updateRating(number){
+  var courseNum = number;
+  var average_rating = 0.0; 
+  var queryObject = { number: courseNum };
+  Course.find(queryObject, (err, courses) => {
+    console.log(courses);
+    if (err) {
+      console.log("error" + err);
+    } else {
+      // since number is primary key, it is not possible to have more than one course having the same name
+      var singleCourse = courses[0];
+      var comments = singleCourse.comments;
+      var average_rating = 0;
+      comments.forEach((comment) => {
+        average_rating += Number(comment.rating);
+
+     });
+     average_rating = average_rating/comments.length;
+     singleCourse.rating = average_rating;
+    }
+  });
+  return average_rating;
+}
+
 
 /**
  * User story 5
