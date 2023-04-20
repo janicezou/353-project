@@ -56,6 +56,7 @@ public class ViewComments extends AppCompatActivity {
                             tv.setText("No comments");
                             System.out.println("No comments");
                         } else {
+                            String[] commentID = new String[data.length()];
                             String[] courseNumbers = new String[data.length()];
                             String[] ratings = new String[data.length()];
                             String[] comments = new String[data.length()];
@@ -63,17 +64,19 @@ public class ViewComments extends AppCompatActivity {
                             for (int i = 0; i < data.length(); i++) {
                                 System.out.println("Start");
                                 JSONObject datusobj = data.getJSONObject(i);
+                                String _id = (String) datusobj.get("comment_id");
                                 String cn = (String) datusobj.get("courseNum");
                                 String ts = (String) datusobj.get("timestamp");
                                 int r_int = (int) datusobj.get("rating");
                                 String r = Integer.toString(r_int);
                                 String t = (String) datusobj.get("comment");
+                                commentID[i] = _id;
                                 courseNumbers[i] = cn;
                                 ratings[i] = r;
                                 comments[i] = t;
                                 timestampes[i] = ts;
                             }
-                            CustomBaseAdapter customBaseAdapter = new CustomBaseAdapter(getApplicationContext(), courseNumbers, ratings, comments, timestampes);
+                            CustomBaseAdapter customBaseAdapter = new CustomBaseAdapter(getApplicationContext(), courseNumbers, ratings, comments, timestampes, commentID);
                             listView.setAdapter(customBaseAdapter);
                         }
                     } catch (Exception e) {

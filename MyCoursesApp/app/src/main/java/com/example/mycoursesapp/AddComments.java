@@ -26,6 +26,12 @@ public class AddComments extends AppCompatActivity {
 
     protected String message;
 
+    public void backAddCommentAddButtonClick(View v){
+        Intent intent = new Intent(this, LoginPageActivity.class);
+        intent.putExtra("email", email);
+        startActivity(intent);
+    }
+
     public void onAddCommentAddButtonClick(View v) {
         EditText edit_course_number = findViewById(R.id.course_number);
         EditText edit_rating = findViewById(R.id.rating);

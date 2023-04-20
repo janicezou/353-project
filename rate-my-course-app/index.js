@@ -874,11 +874,13 @@ app.use("/seeAllMyComments/:user_email", async (req, res) => {
         course.comments.forEach((comment) => {
           if (comment) {
             if (comment.user === user_email) {
+              var comment_id = comment._id;
               var timestamp = comment.createdAt;
               var text = comment.text;
               var rating = comment.rating;
               var courseNum = comment.courseNumber;
               allComments.push({
+                id: comment_id,
                 courseNum: courseNum,
                 timestamp: timestamp,
                 comment: text,
@@ -895,6 +897,88 @@ app.use("/seeAllMyComments/:user_email", async (req, res) => {
     console.log(err);
     res.send([{ status: "Error" }]);
   }
+});
+
+app.get("/deleteCommentAndroid/:number/:comment_id", (req, res) => {
+  var courseNum = req.params.number;
+  var comment_id = req.params.comment_id;
+  var queryObject = { number: courseNum };
+  Course.find(queryObject, (e, courses) => {
+    if (e) {
+      res.type("html").status(200);
+      res.write("Error " + e);
+      res.end();
+    } else if (courses.length == 0) {
+      res.type("html").status(400);
+      res.write("Course not found");
+      res.end();
+    } else {
+      // unique id for course, thus only one will be returned
+      courses[0].comments.id(comment_id).remove(); // delete the comment with id (_id)
+      courses[0].save((err) => {
+        if (err) {
+          res.type("html").status(400);
+          res.write("Delete comment failed");
+          res.end();
+        } else {
+          res.type("html").status(200);
+          res.write("Delete comment Succeeded");
+          res.end();
+        }
+      });
+    }
+  });
+});
+
+/**
+ * User story 6
+ * Author: Xinran
+ * Date modified: Mar 19. 2023
+ * edit the comment for a specific course
+ * @Param number: the course number for the course (primary key)
+ * @Param _id: the id for the comment to be deleted or edited
+ */
+app.post("/editCommentAndroid/:number/:comment_id", (req, res) => {
+  var courseNum = req.params.number;
+  var comment_id = req.params.comment_id;
+  var text = req.query.text;
+  var rating = req.query.rating;
+  var queryObject = { number: courseNum, "comments._id": comment_id };
+  if (Number(rating) < 0 || Number(rating) > 5) {
+    res.type("html").status(200);
+    console.log("error: " + err);
+    res.write("Rating should be within the range (0,5)");
+    res.end();
+  }
+  Course.find(queryObject, (err, courses) => {
+    if (err) {
+      res.type("html").status(400);
+      console.log("error: " + err);
+      res.write("edit comment failed: " + err);
+      res.end();
+    } else if (courses.length == 0) {
+      console.log("course not found");
+      res.type("html").status(200);
+      res.write("Course/comment not found");
+      res.end();
+    } else {
+      var course = courses[0];
+      course.comments.id(comment_id).rating = Number(rating);
+      course.comments.id(comment_id).text = text;
+      course.save((err, c) => {
+        if (err) {
+          res.type("html").status(400);
+          console.log("error: " + err);
+          res.write("edit comment failed: " + err);
+          res.end();
+        } else {
+          res.type("html").status(200);
+          res.write("Edit success");
+          res.end();
+        }
+      });
+    }
+  });
 });
 
 app.use("/allUser", (req, res) => {
