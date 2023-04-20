@@ -64,7 +64,7 @@ public class ViewComments extends AppCompatActivity {
                             for (int i = 0; i < data.length(); i++) {
                                 System.out.println("Start");
                                 JSONObject datusobj = data.getJSONObject(i);
-                                String _id = (String) datusobj.get("comment_id");
+                                String _id = (String) datusobj.get("id");
                                 String cn = (String) datusobj.get("courseNum");
                                 String ts = (String) datusobj.get("timestamp");
                                 int r_int = (int) datusobj.get("rating");
@@ -76,7 +76,7 @@ public class ViewComments extends AppCompatActivity {
                                 comments[i] = t;
                                 timestampes[i] = ts;
                             }
-                            CustomBaseAdapter customBaseAdapter = new CustomBaseAdapter(getApplicationContext(), courseNumbers, ratings, comments, timestampes, commentID);
+                            CustomBaseAdapter customBaseAdapter = new CustomBaseAdapter(getApplicationContext(), courseNumbers, ratings, comments, timestampes, commentID, email);
                             listView.setAdapter(customBaseAdapter);
                         }
                     } catch (Exception e) {

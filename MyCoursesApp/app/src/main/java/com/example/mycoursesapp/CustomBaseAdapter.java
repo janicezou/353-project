@@ -24,15 +24,18 @@ public class CustomBaseAdapter extends BaseAdapter {
     String[] timestamps;
 
     String[] commentID;
+
+    String email;
     LayoutInflater inflater;
 
-    public CustomBaseAdapter(Context ctx, String[] courseNum, String[] ratings, String[] comments, String[] timestamp, String[] commentID){
+    public CustomBaseAdapter(Context ctx, String[] courseNum, String[] ratings, String[] comments, String[] timestamp, String[] commentID, String email){
         this.context = ctx;
         this.courseNumbers = courseNum;
         this.ratings = ratings;
         this.comments = comments;
         this.timestamps = timestamp;
         this.commentID = commentID;
+        this.email = email;
         inflater = (LayoutInflater.from(ctx));
     }
 
@@ -84,8 +87,11 @@ public class CustomBaseAdapter extends BaseAdapter {
                             conn.setRequestMethod("GET");
                             conn.connect();
 
-                            if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                                throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+                            if(conn.getResponseCode() == 200){
+                                Intent intent = new Intent(context, ViewComments.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                                intent.putExtra("email", email);
+                                context.startActivity(intent);
                             }
 
                         } catch (Exception e) {
@@ -110,10 +116,12 @@ public class CustomBaseAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, One_comment.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                 intent.putExtra("comment_id", commentID[i]);
                 intent.putExtra("rating", ratings[i]);
                 intent.putExtra("comments", comments[i]);
                 intent.putExtra("courseNumber", courseNumbers[i]);
+                intent.putExtra("email", email);
                 context.startActivity(intent);
             }
         });

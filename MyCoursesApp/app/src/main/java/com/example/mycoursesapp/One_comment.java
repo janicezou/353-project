@@ -1,5 +1,6 @@
 package com.example.mycoursesapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -22,6 +23,7 @@ public class One_comment extends AppCompatActivity {
     protected String comment;
 
     protected String message;
+    protected String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,7 @@ public class One_comment extends AppCompatActivity {
         rating = getIntent().getStringExtra("rating");
         comment_id = getIntent().getStringExtra("comment_id");
         comment = getIntent().getStringExtra("comments");
+        email = getIntent().getStringExtra("email");
         EditText rating_box = findViewById(R.id.one_rating);
         EditText editComment = findViewById(R.id.one_comment_text);
         rating_box.setText(rating);
@@ -47,6 +50,7 @@ public class One_comment extends AppCompatActivity {
         EditText editComment = findViewById(R.id.one_comment_text);
 
         String new_rating = rating_box.getText().toString();
+        System.out.println("***********NEW RATING:" + new_rating);
         String new_comment = editComment.getText().toString();
 
         try {
@@ -56,7 +60,7 @@ public class One_comment extends AppCompatActivity {
                     // assumes that there is a server running on the AVD's host on port 3000
                     // and that it has a /login endpoint
 
-                    URL url = new URL("http://10.0.2.2:3000/editCommentAndroid/"+courseNum+"/"+comment_id+"?"+"text="+new_comment+"rating="+new_rating);
+                    URL url = new URL("http://10.0.2.2:3000/editCommentAndroid/"+courseNum+"/"+comment_id+"?"+"text="+new_comment+"&rating="+new_rating);
 
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("GET");
@@ -66,6 +70,9 @@ public class One_comment extends AppCompatActivity {
                     String response = in.nextLine();
                     if (conn.getResponseCode() == 200) {
                         message = "Edit success";
+                        Intent i = new Intent(this, ViewComments.class);
+                        i.putExtra("email", email);
+                        startActivity(i);
                     } else {
                         // login failed, show error message
                         message = response;

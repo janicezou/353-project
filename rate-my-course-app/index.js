@@ -867,7 +867,7 @@ app.use("/seeAllMyComments/:user_email", async (req, res) => {
   try {
     const result = await Course.find(queryObject).sort({ createdAt: -1 });
     if (result.length === 0) {
-      res.send([{ status: "No results found" }]);
+      res.send([]);
       return;
     } else {
       result.forEach((course) => {
@@ -905,7 +905,7 @@ app.get("/deleteCommentAndroid/:number/:comment_id", (req, res) => {
   var queryObject = { number: courseNum };
   Course.find(queryObject, (e, courses) => {
     if (e) {
-      res.type("html").status(200);
+      res.type("html").status(400);
       res.write("Error " + e);
       res.end();
     } else if (courses.length == 0) {
@@ -938,14 +938,14 @@ app.get("/deleteCommentAndroid/:number/:comment_id", (req, res) => {
  * @Param number: the course number for the course (primary key)
  * @Param _id: the id for the comment to be deleted or edited
  */
-app.post("/editCommentAndroid/:number/:comment_id", (req, res) => {
+app.get("/editCommentAndroid/:number/:comment_id", (req, res) => {
   var courseNum = req.params.number;
   var comment_id = req.params.comment_id;
   var text = req.query.text;
   var rating = req.query.rating;
   var queryObject = { number: courseNum, "comments._id": comment_id };
   if (Number(rating) < 0 || Number(rating) > 5) {
-    res.type("html").status(200);
+    res.type("html").status(400);
     console.log("error: " + err);
     res.write("Rating should be within the range (0,5)");
     res.end();
@@ -958,7 +958,7 @@ app.post("/editCommentAndroid/:number/:comment_id", (req, res) => {
       res.end();
     } else if (courses.length == 0) {
       console.log("course not found");
-      res.type("html").status(200);
+      res.type("html").status(400);
       res.write("Course/comment not found");
       res.end();
     } else {
@@ -973,6 +973,7 @@ app.post("/editCommentAndroid/:number/:comment_id", (req, res) => {
           res.end();
         } else {
           res.type("html").status(200);
+          console.log("edit comment from android success")
           res.write("Edit success");
           res.end();
         }
