@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,11 +26,15 @@ public class Search extends AppCompatActivity {
     EditText name,number,department,professor;
     boolean alphabetically=false;
     Double averageRating = 0.0;
+    ListView results;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search);
+        results = (ListView) findViewById(R.id.listCourses);
+
 
 
         //get search query
@@ -48,32 +53,55 @@ public class Search extends AppCompatActivity {
         AverageRating ar = new AverageRating();
 
         if(courses == null || courses.size() ==0){
-            updateTxt="no results found";
+            TextView tv = findViewById(R.id.allcomments_statusField);
+            tv.setText("no results found");
+
         } else{
-            for (JSONObject course : courses){
-                String _name = null;
-                String _number = null;
-                Double _rating = 0.0;
+            String[] courseNumbers = new String[courses.size()];
+            String[] courseNames = new String[courses.size()];
+            String[] courseProfs = new String[courses.size()];
+            String[] courseDepts = new String[courses.size()];
+            String[] courseSchools = new String[courses.size()];
+            String[] courseRatings = new String[courses.size()];
+            for (int i = 0; i < courses.size(); i++) {
+                JSONObject course = courses.get(i);
+
+                String cName = null;
+                String cNumber = null;
+                String cProf = null;
+                String cDept = null;
+                String cSchool = null;
+                Double cRating = 0.0;
                 try {
-                    _name = (String) course.get("name");
-                    _number = (String) course.get("number");
-                    _rating = ar.getAverageRating(_number);
+                    //courseNumbers, courseNames, courseProfs, courseDepts, courseSchools, courseRatings
+                    cName = (String) course.get("name");
+                    cNumber = (String) course.get("number");
+                    cProf = (String) course.get("instructor");
+                    cDept = (String) course.get("department");
+                    cSchool = (String) course.get("school");
+                    cRating = ar.getAverageRating(cNumber);
 //                    averageRating += _rating;
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
-
-                updateTxt += "Course Name: "+_name+"; Course Number: "+_number+"; Rating: "+_rating+"\n";
+                courseNumbers[i] = cName;
+                courseNumbers[i] = cNumber;
+                courseNumbers[i] = cProf;
+                courseNumbers[i] = cDept;
+                courseNumbers[i] = cSchool;
+                courseNumbers[i] = Double.toString(cRating);
             }
+            CoursesBaseAdapter coursesBaseAdapter = new CoursesBaseAdapter(getApplicationContext(), courseNumbers, courseNames, courseProfs, courseDepts, courseSchools, courseRatings);
+            results.setAdapter(coursesBaseAdapter);
         }
 //        averageRating = averageRating/courses.size();
 
 //        updateTxt = averageRating + "\n" + updateTxt;
 
-        TextView results = findViewById(R.id.results);
-        results.setText(String.valueOf(updateTxt));
         // TextView averageRatingView = findViewById(R.id.average_rating);
         // averageRatingView.setText(String.valueOf(averageRating));
+
+
 
     }
 

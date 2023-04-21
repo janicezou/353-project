@@ -22,6 +22,7 @@ public class ViewComments extends AppCompatActivity {
     String email;
     ListView listView;
     @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         email = getIntent().getStringExtra("email");

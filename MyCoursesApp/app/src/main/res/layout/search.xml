@@ -8,76 +8,89 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-    <EditText
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:hint="Course Name" />
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="Course Name" />
 
-    <EditText
-        android:id="@+id/number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:hint="Course Number"  />
+        <EditText
+            android:id="@+id/number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="Course Number"  />
 
-    <EditText
-        android:id="@+id/department"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:hint="Course Depertment"  />
+        <EditText
+            android:id="@+id/department"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="Course Depertment"  />
 
-    <EditText
-        android:id="@+id/professor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:hint="Professor" />
-
-    <Button
-        android:id="@+id/searchButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onSearchButtonClick"
-        android:text="Search"
-        tools:layout_editor_absoluteX="20dp"
-        tools:layout_editor_absoluteY="180dp" />
+        <EditText
+            android:id="@+id/professor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="Professor" />
 
         <Button
-        android:id="@+id/backButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onBackButtonClick"
-        android:text="Back" />
+            android:id="@+id/searchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onSearchButtonClick"
+            android:text="Search"
+            tools:layout_editor_absoluteX="20dp"
+            tools:layout_editor_absoluteY="180dp" />
 
-    <Button
-        android:id="@+id/sortButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onSortButtonClick"
-        android:text="Sort"/>
+        <Button
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onBackButtonClick"
+            android:text="Back" />
 
-    <TextView
-        android:id="@+id/results"
-        android:layout_width="400dp"
-        android:layout_height="500dp"
-        android:text="Search Results \n"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        />
 
-    <TextView
-        android:id="@+id/average_rating"
-        android:layout_width="400dp"
-        android:layout_height="400dp"
-        android:text="Average Rating"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ListView
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:id="@+id/listCourses" />
+
+            </LinearLayout>
+
+        <!-- <Button
+            android:id="@+id/sortButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onSortButtonClick"
+            android:text="Sort"/> -->
+
+        <!-- <TextView
+            android:id="@+id/results"
+            android:layout_width="400dp"
+            android:layout_height="500dp"
+            android:text="Search Results \n"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/average_rating"
+            android:layout_width="400dp"
+            android:layout_height="400dp"
+            android:text="Average Rating"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            /> -->
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
