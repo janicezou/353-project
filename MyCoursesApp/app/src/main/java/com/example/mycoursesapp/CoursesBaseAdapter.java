@@ -71,10 +71,12 @@ public class CoursesBaseAdapter extends BaseAdapter {
             public void onClick(View v) {
                 Intent intent = new Intent(context, One_comment.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                intent.putExtra("comment_id", commentID[i]);
-                intent.putExtra("rating", ratings[i]);
-                intent.putExtra("comments", comments[i]);
                 intent.putExtra("courseNumber", courseNumbers[i]);
+                intent.putExtra("courseName", courseNames[i]);
+                intent.putExtra("courseProf", courseProfs[i]);
+                intent.putExtra("courseDept", courseDepts[i]);
+                intent.putExtra("courseSchool", courseSchools[i]);
+                intent.putExtra("courseRating", courseRatings[i]);
                 context.startActivity(intent);
             }
         });

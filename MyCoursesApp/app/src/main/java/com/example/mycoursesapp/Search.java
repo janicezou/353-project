@@ -35,8 +35,6 @@ public class Search extends AppCompatActivity {
         setContentView(R.layout.search);
         results = (ListView) findViewById(R.id.listCourses);
 
-
-
         //get search query
         name = (EditText) findViewById(R.id.name);
         number = (EditText) findViewById(R.id.number);
@@ -44,7 +42,6 @@ public class Search extends AppCompatActivity {
         professor = (EditText) findViewById(R.id.professor);
 //        AverageRating ar = new AverageRating();
 //        averageRating = ar.getAverageRating(number.getText().toString());
-
     }
 
     private void displayResponse(List<JSONObject> courses) {
@@ -100,9 +97,6 @@ public class Search extends AppCompatActivity {
 
         // TextView averageRatingView = findViewById(R.id.average_rating);
         // averageRatingView.setText(String.valueOf(averageRating));
-
-
-
     }
 
 
@@ -119,8 +113,6 @@ public class Search extends AppCompatActivity {
         String profS = ((EditText) findViewById(R.id.professor)).getText().toString();
 
         ArrayList<JSONObject> courses = new ArrayList<JSONObject>();
-
-
 
         try {
             ExecutorService executor = Executors.newSingleThreadExecutor();

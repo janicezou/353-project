@@ -9,18 +9,16 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/name"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:text=""/>
-
-
-        <TextView
             android:id="@+id/number"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:text=""/>
 
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:text=""/>
 
         <TextView
             android:id="@+id/instructor"
@@ -46,15 +44,15 @@
         <TextView
             android:id="@+id/rating"
             android:layout_width="match_parent"
-            android:text=""/>
             android:layout_height="80dp"
+            android:text=""/>
 
         <Button
             android:id="@+id/view_comments"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:text="Comments"
-            android:onClick="onBackAddCommentAddButtonClick" />
+            android:onClick="onViewCommentButtonClick" />
 
 
         <Button
