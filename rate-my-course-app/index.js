@@ -460,8 +460,11 @@ app.use("/search", async (req, res) => {
         res.write(
           ' <a href="/internalDelete?number=' + course.number + '">[Delete]</a>'
         );
+        res.write('<a href="/edit/' + course.number + '">[EDIT]</a><br>');
+
       });
-      res.write(' <a href="/templates/homepage.html">[HOME]</a>');
+      res.write("\n");
+      res.write('<a href="/templates/homepage.html">[HOME]</a>');
       res.end();
       return;
     }
