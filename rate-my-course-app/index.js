@@ -513,6 +513,29 @@ app.get("/searching", async (req, res) => {
   }
 });
 
+// get json object of all relevant comments
+app.get("/viewCourseComments/:number", async (req, res) => {
+  var courseNum = req.params.number;
+  var filter = { number: courseNum };
+  try {
+    const result = await Course.find(filter);
+    if(result.length > 0){
+      var singleCourse = result[0];
+      var comments = singleCourse.comments;
+      console.log(comments);
+      res.type("html").status(200);
+      res.json(comments);
+    }
+    return;
+  } catch (err) {
+    res.type("html").status(200);
+    console.log("uh oh" + err);
+    res.write(err);
+    res.end();
+    return;
+  }
+});
+
 app.use("/internalDelete", async (req, res) => {
   var filter = { number: req.query.number };
   try {

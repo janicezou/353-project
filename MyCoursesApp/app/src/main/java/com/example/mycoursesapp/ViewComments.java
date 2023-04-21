@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 public class ViewComments extends AppCompatActivity {
     String email;
     ListView listView;
-    @Override
+//    @Override
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
