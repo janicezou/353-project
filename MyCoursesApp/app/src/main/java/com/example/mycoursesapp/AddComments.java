@@ -40,6 +40,10 @@ public class AddComments extends AppCompatActivity {
         String course_number = edit_course_number.getText().toString();
         String rating = edit_rating.getText().toString();
         String comment = edit_comment.getText().toString();
+        if(course_number.length() <= 0 || rating.length() <= 0 || comment.length() <= 0){
+            tv.setText("comment underspecified");
+            return;
+        }
         try {
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.execute( () -> {

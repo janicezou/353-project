@@ -108,11 +108,11 @@ app.use("/all", (req, res) => {
               " school: " +
               course.school
           );
-          res.write(
-            '<br> <a href="/addComment/' +
-              course.number +
-              '">Add a Comment (Test purpose only)</a><br>'
-          );
+          // res.write(
+          //   '<br> <a href="/addComment/' +
+          //     course.number +
+          //     '">Add a Comment (Test purpose only)</a><br>'
+          // );
         }
         res.write("</li>");
       });
@@ -161,11 +161,11 @@ app.get("/viewCourse/:number", (req, res) => {
           singleCourse.number +
           '">View Comments</a><br>'
       );
-      res.write(
-        '<br> <a href="/addComment/' +
-          singleCourse.number +
-          '">Add a Comment (Test purpose only)</a><br>'
-      );
+      // res.write(
+      //   '<br> <a href="/addComment/' +
+      //     singleCourse.number +
+      //     '">Add a Comment (Test purpose only)</a><br>'
+      // );
       res.write('<a href="/edit/' + singleCourse.number + '">[EDIT]</a><br>');
       res.write('<a href="/templates/homepage.html">[HOME]</a><br>');
       res.end();
