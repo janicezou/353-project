@@ -25,7 +25,7 @@ public class ViewCourseComments extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        courseNumber = getIntent().getStringExtra("number");
+        courseNumber = getIntent().getStringExtra("courseNumber");
 
         setContentView(R.layout.activity_check_all_comment); // BARKING CAT
         listView = (ListView) findViewById(R.id.listComments);
