@@ -17,6 +17,14 @@ var User = require("./User.js");
 // this is the action of the "add new course" form
 app.use("/add", async (req, res) => {
   // construct the Course from the form data which is in the request body
+  if(!req.body.number || !req.body.number ){
+    res.type("html").status(200);
+    res.write('a course name and number must be specified');
+    res.write(' <a href="/templates/add-course.html">[BACK]</a>');
+    res.end();
+    return;
+
+  }
   var average_rating = 0.0;
   var newCourse = new Course({
     name: req.body.name,
@@ -39,6 +47,7 @@ app.use("/add", async (req, res) => {
   } catch (err) {
     res.type("html").status(200);
     res.write("uh oh: " + err);
+    res.write(' <a href="/templates/homepage.html">[HOME]</a>');
     console.log(err);
     res.end();
   }
@@ -108,6 +117,8 @@ app.use("/all", (req, res) => {
         res.write("</li>");
       });
       res.write("</li>");
+      res.write('<a href="/templates/homepage.html">[HOME]</a><br>');
+
       res.end();
     }
   }).sort({ number: "asc" });
@@ -182,7 +193,9 @@ app.use("/delete", async (req, res) => {
     res.end();
     return;
   } catch (err) {
-    console.log("uh oh" + err);
+    res.type("html").status(200);
+    res.write("uh oh: " + err);
+    res.write(' <a href="/templates/homepage.html">[HOME]</a>');
     res.end();
     return;
   }
@@ -472,6 +485,7 @@ app.use("/search", async (req, res) => {
     res.type("html").status(200);
     console.log("uh oh" + err);
     res.write(err);
+    res.write(' <a href="/templates/homepage.html">[HOME]</a>');
     res.end();
     return;
   }
@@ -508,6 +522,7 @@ app.get("/searching", async (req, res) => {
     res.type("html").status(200);
     console.log("uh oh" + err);
     res.write(err);
+    res.write(' <a href="/templates/homepage.html">[HOME]</a>');
     res.end();
     return;
   }
@@ -531,6 +546,7 @@ app.get("/viewCourseComments/:number", async (req, res) => {
     res.type("html").status(200);
     console.log("uh oh" + err);
     res.write(err);
+    res.write(' <a href="/templates/homepage.html">[HOME]</a>');
     res.end();
     return;
   }
@@ -553,7 +569,9 @@ app.use("/internalDelete", async (req, res) => {
     res.end();
     return;
   } catch (err) {
-    console.log("uh oh" + err);
+    res.type("html").status(200);
+    res.write("uh oh: " + err);
+    res.write(' <a href="/templates/homepage.html">[HOME]</a>');
     res.end();
     return;
   }
