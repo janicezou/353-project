@@ -1,18 +1,25 @@
 <html>
-  <form action="/add" method="post">
-    Course Name: <input name="name" />
-    <p>Course Number: <input name="number" /></p>
+  <head>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="container">
+      <form action="/add" method="post">
 
-    <p>Instructor Name: <input name="instructor" /></p>
-
-    <p>Course Department: <input name="department" /></p>
-
-    <p>Course School: <input name="school" /></p>
-
-    <p>Course Description: <input name="description" /></p>
-
-    <p>
-      <input type="submit" value="Submit form!" />
-    </p>
-  </form>
+        <p>Course Name: <input type="inquiry" name="name" /></p>
+    
+        <p>Course Number: <input type="inquiry" name="number" /></p>
+    
+        <p>Instructor Name: <input type="inquiry" name="instructor" /></p>
+    
+        <p>Course Department: <input type="inquiry" name="department" /></p>
+    
+        <p>Course School: <input type="inquiry" name="school" /></p>
+    
+        <p>Course Description: <input type="inquiry" name="description" /></p>
+    
+        <p><input type="submit" value="Submit form!"/></p>
+      </form>
+    </div>
+  </body>
 </html>
