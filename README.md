@@ -25,11 +25,13 @@
 
 ## build
     in Program Files\MongoDB\Server\6.0
+
 ```
 .\bin\mongod --dbpath db_directory
 ```
 
     in 353-project/rate-my-course-app/
+    
 ```
 node index.js
 ```
