@@ -436,12 +436,14 @@ function updateRating(number){
  * @Param professor: the course professor
  */
 app.use("/search", async (req, res) => {
+  
   var filter = {};
   if (req.body.name) {
     filter.name = req.body.name;
   }
   if (req.body.number) {
     filter.number = req.body.number;
+    // updateRating(req.body.number);
   }
   if (req.body.department) {
     filter.department = req.body.department;
@@ -498,6 +500,7 @@ app.get("/searching", async (req, res) => {
   }
   if (req.query.number) {
     filter.number = req.query.number;
+    // updateRating(req.body.number);
   }
   if (req.query.department) {
     filter.department = req.query.department;
@@ -508,12 +511,13 @@ app.get("/searching", async (req, res) => {
   // res.send(filter);
   // find filtered Course objects in the database
   try {
-    const result = await Course.find(filter).sort({ rating: "asc" });
-    // if ((req.query.sort).equals("name")) {
-    //   result.sort({ name: "asc" });
-    // } else {
-    //   result.sort({ rating: "asc" });
-    // }
+    // result = await Course.find(filter);//.sort({ rating: "asc" });
+    var result;
+    if (req.query.sort && (req.query.sort == "name")) {
+      result = await Course.find(filter).sort({ name: 'asc' });
+    } else {
+      result = await Course.find(filter).sort({ rating: "asc" });
+    }
     console.log(result);
     res.type("html").status(200);
     res.json(result);

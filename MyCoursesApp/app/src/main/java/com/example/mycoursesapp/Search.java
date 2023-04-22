@@ -93,6 +93,7 @@ public class Search extends AppCompatActivity {
 
     public void onSortButtonClick(View v){
         alphabetically = !alphabetically;
+        onSearchButtonClick(v);
     }
 
 

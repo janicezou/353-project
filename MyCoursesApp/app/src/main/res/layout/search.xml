@@ -52,6 +52,13 @@
             android:onClick="onBackButtonClick"
             android:text="Back" />
 
+        <Button
+            android:id="@+id/sortButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onSortButtonClick"
+            android:text="Sort" />
+
         <TextView
             android:id="@+id/statusField"
             android:layout_width="match_parent"
