@@ -97,4 +97,10 @@ public class One_comment extends AppCompatActivity {
             tv.setText(message);
         }
     }
+
+    public void onBackAddCommentAddButtonClick(View v){
+        Intent i = new Intent();
+        setResult(RESULT_OK, i);
+        finish();
+    }
 }

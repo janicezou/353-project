@@ -45,7 +45,6 @@ public class Search extends AppCompatActivity {
     }
 
     private void displayResponse(List<JSONObject> courses) {
-        String updateTxt="";
         averageRating = 0.0;
         AverageRating ar = new AverageRating();
 
@@ -62,15 +61,13 @@ public class Search extends AppCompatActivity {
             String[] courseRatings = new String[courses.size()];
             for (int i = 0; i < courses.size(); i++) {
                 JSONObject course = courses.get(i);
-
-                String cName = null;
-                String cNumber = null;
-                String cProf = null;
-                String cDept = null;
-                String cSchool = null;
+                String cName = " ";
+                String cNumber = " ";
+                String cProf = " ";
+                String cDept = " ";
+                String cSchool = " ";
                 Double cRating = 0.0;
                 try {
-                    //courseNumbers, courseNames, courseProfs, courseDepts, courseSchools, courseRatings
                     cName = (String) course.get("name");
                     cNumber = (String) course.get("number");
                     cProf = (String) course.get("instructor");
@@ -81,12 +78,16 @@ public class Search extends AppCompatActivity {
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
-                courseNumbers[i] = cName;
+                courseNames[i] = cName;
                 courseNumbers[i] = cNumber;
-                courseNumbers[i] = cProf;
-                courseNumbers[i] = cDept;
-                courseNumbers[i] = cSchool;
-                courseNumbers[i] = Double.toString(cRating);
+                courseProfs[i] = cProf;
+                courseDepts[i] = cDept;
+                courseSchools[i] = cSchool;
+                if(cRating == null || cRating.isNaN()){
+                    courseRatings[i] = " ";
+                } else {
+                    courseRatings[i] = Double.toString(cRating);
+                }
             }
             CoursesBaseAdapter coursesBaseAdapter = new CoursesBaseAdapter(getApplicationContext(), courseNumbers, courseNames, courseProfs, courseDepts, courseSchools, courseRatings);
             results.setAdapter(coursesBaseAdapter);

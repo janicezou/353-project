@@ -19,16 +19,15 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class ViewCourseComments extends AppCompatActivity {
-    String courseNumber,email;
+    String courseNumber;
     ListView listView;
     //    @Override
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         courseNumber = getIntent().getStringExtra("number");
-        email = getIntent().getStringExtra("email");
 
-        setContentView(R.layout.activity_check_all_comment);
+        setContentView(R.layout.activity_check_all_comment); // BARKING CAT
         listView = (ListView) findViewById(R.id.listComments);
 
         TextView tv = findViewById(R.id.allcomments_statusField);
@@ -79,8 +78,8 @@ public class ViewCourseComments extends AppCompatActivity {
                             comments[i] = t;
                             timestampes[i] = ts;
                         }
-                        CustomBaseAdapter customBaseAdapter = new CustomBaseAdapter(getApplicationContext(), courseNumbers, ratings, comments, timestampes, commentID, email);
-                        listView.setAdapter(customBaseAdapter);
+                        CommentsBaseAdapter adapter = new CommentsBaseAdapter(getApplicationContext(), courseNumbers, ratings, comments, timestampes, commentID);
+                        listView.setAdapter(adapter);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

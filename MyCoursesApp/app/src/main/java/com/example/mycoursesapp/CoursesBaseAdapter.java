@@ -9,12 +9,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
 public class CoursesBaseAdapter extends BaseAdapter {
 
     Context context;
@@ -69,19 +63,12 @@ public class CoursesBaseAdapter extends BaseAdapter {
         commentBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, One_comment.class);
+                Intent intent = new Intent(context, ViewCourseComments.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                 intent.putExtra("courseNumber", courseNumbers[i]);
-                intent.putExtra("courseName", courseNames[i]);
-                intent.putExtra("courseProf", courseProfs[i]);
-                intent.putExtra("courseDept", courseDepts[i]);
-                intent.putExtra("courseSchool", courseSchools[i]);
-                intent.putExtra("courseRating", courseRatings[i]);
                 context.startActivity(intent);
             }
         });
-
-
 
         return view;
     }

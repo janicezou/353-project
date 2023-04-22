@@ -38,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:text="Back"
-            android:onClick="oneBackAddCommentAddButtonClick" />
+            android:onClick="onBackAddCommentAddButtonClick" />
 
         <TextView
             android:id="@+id/edit_comment_status"
