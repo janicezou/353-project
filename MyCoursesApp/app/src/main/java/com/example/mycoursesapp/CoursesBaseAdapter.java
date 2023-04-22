@@ -63,7 +63,9 @@ public class CoursesBaseAdapter extends BaseAdapter {
         commentBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, ViewCourseComments.class);
+                Intent intent = new Intent(context.getApplicationContext(), ViewCourseComments.class);
+//                Intent intent = new Intent(context, ViewCourseComments.class);
+                System.out.println(context);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                 intent.putExtra("courseNumber", courseNumbers[i]);
                 context.startActivity(intent);

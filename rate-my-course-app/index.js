@@ -532,14 +532,32 @@ app.get("/searching", async (req, res) => {
 app.get("/viewCourseComments/:number", async (req, res) => {
   var courseNum = req.params.number;
   var filter = { number: courseNum };
+  var allComments = [];
   try {
     const result = await Course.find(filter);
     if(result.length > 0){
       var singleCourse = result[0];
       var comments = singleCourse.comments;
+      comments.forEach((comment) => {
+        if(comment){
+          var comment_id = comment._id;
+          var timestamp = comment.createdAt;
+          var text = comment.text;
+          var rating = comment.rating;
+          var courseNum = comment.courseNumber;
+          allComments.push({
+            id: comment_id,
+            courseNum: courseNum,
+            timestamp: timestamp,
+            comment: text,
+            rating: rating,
+          });
+        }
+      });
       console.log(comments);
       res.type("html").status(200);
-      res.json(comments);
+      res.json(allComments);
+      // res.json(allcomments);
     }
     return;
   } catch (err) {

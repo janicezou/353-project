@@ -25,7 +25,6 @@ import java.util.concurrent.TimeUnit;
 public class Search extends AppCompatActivity {
     EditText name,number,department,professor;
     boolean alphabetically=false;
-    Double averageRating = 0.0;
     ListView results;
 
 
@@ -40,19 +39,17 @@ public class Search extends AppCompatActivity {
         number = (EditText) findViewById(R.id.number);
         department = (EditText) findViewById(R.id.department);
         professor = (EditText) findViewById(R.id.professor);
-//        AverageRating ar = new AverageRating();
-//        averageRating = ar.getAverageRating(number.getText().toString());
     }
 
     private void displayResponse(List<JSONObject> courses) {
-        averageRating = 0.0;
-        AverageRating ar = new AverageRating();
+        TextView tv = findViewById(R.id.statusField);
 
         if(courses == null || courses.size() ==0){
-            TextView tv = findViewById(R.id.allcomments_statusField);
             tv.setText("no results found");
 
         } else{
+            tv.setText(" ");
+            AverageRating ar = new AverageRating();
             String[] courseNumbers = new String[courses.size()];
             String[] courseNames = new String[courses.size()];
             String[] courseProfs = new String[courses.size()];
@@ -74,7 +71,6 @@ public class Search extends AppCompatActivity {
                     cDept = (String) course.get("department");
                     cSchool = (String) course.get("school");
                     cRating = ar.getAverageRating(cNumber);
-//                    averageRating += _rating;
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
@@ -92,12 +88,6 @@ public class Search extends AppCompatActivity {
             CoursesBaseAdapter coursesBaseAdapter = new CoursesBaseAdapter(getApplicationContext(), courseNumbers, courseNames, courseProfs, courseDepts, courseSchools, courseRatings);
             results.setAdapter(coursesBaseAdapter);
         }
-//        averageRating = averageRating/courses.size();
-
-//        updateTxt = averageRating + "\n" + updateTxt;
-
-        // TextView averageRatingView = findViewById(R.id.average_rating);
-        // averageRatingView.setText(String.valueOf(averageRating));
     }
 
 
