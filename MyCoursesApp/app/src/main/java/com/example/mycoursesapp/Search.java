@@ -49,7 +49,7 @@ public class Search extends AppCompatActivity {
 
         } else{
             tv.setText(" ");
-            AverageRating ar = new AverageRating();
+//            AverageRating ar = new AverageRating();
             String[] courseNumbers = new String[courses.size()];
             String[] courseNames = new String[courses.size()];
             String[] courseProfs = new String[courses.size()];
@@ -63,14 +63,23 @@ public class Search extends AppCompatActivity {
                 String cProf = " ";
                 String cDept = " ";
                 String cSchool = " ";
-                Double cRating = 0.0;
+                Float cRating = 0.0f;
                 try {
                     cName = (String) course.get("name");
                     cNumber = (String) course.get("number");
                     cProf = (String) course.get("instructor");
                     cDept = (String) course.get("department");
                     cSchool = (String) course.get("school");
-                    cRating = ar.getAverageRating(cNumber);
+//                    cRating = ar.getAverageRating(cNumber);
+                    Object rating = course.get("rating");
+                    if (rating instanceof Number){
+                        cRating = ((Number)rating).floatValue();
+                    } else {
+                        cRating = 0.0f;
+                    }
+//                    cRating = ((rating != null)? Double.parseDouble(rating):0);
+//                    cRating = (Double) course.get("rating");
+
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }

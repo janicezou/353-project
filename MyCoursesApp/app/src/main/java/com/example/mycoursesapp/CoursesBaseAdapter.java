@@ -57,7 +57,12 @@ public class CoursesBaseAdapter extends BaseAdapter {
         profTV.setText("Instructor: " + courseProfs[i]);
         deptTV.setText("Department: " + courseDepts[i]);
         schoolTV.setText("School: " + courseSchools[i]);
-        ratingTV.setText("Rating: " + courseRatings[i]);
+        int endI = courseRatings[i].length();
+        if (endI>=3){
+            endI = 3;
+        }
+        String rating = "Rating: " + (courseRatings[i]).substring(0,endI);
+        ratingTV.setText(rating);
 
 
         commentBTN.setOnClickListener(new View.OnClickListener() {
