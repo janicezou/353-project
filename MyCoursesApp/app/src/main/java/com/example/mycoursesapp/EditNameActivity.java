@@ -26,6 +26,9 @@ public class EditNameActivity extends AppCompatActivity {
 
     protected String email;
 
+    protected String currentUsername;
+    protected final String failedCurrentUsername = "Finding username failed";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +52,46 @@ public class EditNameActivity extends AppCompatActivity {
     }
 
     public String getCurrentUsername() {
-        return "to be implemented";
+        TextView tv = findViewById(R.id.statusField);
+        try {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute( () -> {
+                try {
+                    URL url = new URL("http://10.0.2.2:3000/getUser/" + email);
+
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.connect();
+
+                    Scanner in = new Scanner(conn.getInputStream());
+                    String response = in.nextLine();
+                    System.out.println("This is the response: " + response);
+                    JSONObject json = new JSONObject(response);
+                    message = json.getString("message");
+
+                    if (conn.getResponseCode() == 200) {
+                        currentUsername = message;
+                        System.out.println("This is the current username: " + currentUsername);
+                    } else {
+                        // login failed, show error message
+                        tv.setText(failedCurrentUsername);
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    message = "Finding username failed";
+                }
+            });
+            executor.awaitTermination(2, TimeUnit.SECONDS);
+
+            tv.setText(failedCurrentUsername);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            message = e.toString();
+            tv.setText(message);
+        }
+        return currentUsername;
     }
 
     protected String message;

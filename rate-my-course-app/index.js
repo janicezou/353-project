@@ -1191,6 +1191,24 @@ app.use("/editUsername", async (req, res) => {
 });
 
 /**
+ * view the name of a user
+ */
+app.get("/getUser/:user_email", async (req, res) => {
+  try {
+    const user_email = req.params.user_email;
+    const user = await User.findOne({ email: user_email });
+    if (user) {
+      const name = user.name;
+      res.status(200).json({ message: name });
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "An error occurred", error });
+  }
+});
+
+/**
  * edit the password of a user
  */
 app.use("/editPassword", async (req, res) => {
