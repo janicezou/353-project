@@ -27,13 +27,13 @@ public class AddComments extends AppCompatActivity {
     protected String message;
 
     public void backAddCommentAddButtonClick(View v){
-//        Intent intent = new Intent(this, LoginPageActivity.class);
-//        intent.putExtra("email", email);
-//        startActivity(intent);
         Intent intent = new Intent(this, LoginPageActivity.class);
         intent.putExtra("email", email);
         startActivity(intent);
-        finish();
+//        Intent intent = new Intent(this, LoginPageActivity.class);
+//        intent.putExtra("email", email);
+//        startActivity(intent);
+//        finish();
     }
 
     public void onAddCommentAddButtonClick(View v) {
@@ -83,12 +83,13 @@ public class AddComments extends AppCompatActivity {
                         if (responseCode == HttpURLConnection.HTTP_OK) {
                             Scanner in = new Scanner(conn.getInputStream());
                             message = in.nextLine();
-//                            tv.setText(message);
-//                            // add comment success go back to login page acitivity
-//                            Intent intent = new Intent(this, LoginPageActivity.class);
-//                            intent.putExtra("email", email);
-//                            startActivity(intent);
-//                            finish();
+                            tv.setText(message);
+                            // add comment success go back to login page acitivity
+                            Intent intent = new Intent(this, LoginPageActivity.class);
+                            intent.putExtra("email", email);
+                            startActivity(intent);
+                            finish();
+//                            return;
                         } else if(responseCode == 404){
                             message = "course or rating is invalid";
 //                            tv.setText(message);
