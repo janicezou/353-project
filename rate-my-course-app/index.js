@@ -933,10 +933,31 @@ app.use("/addComment/:number", (req, res) => {
       res.end();
       return;
     } else {
-      res.type("html").status(200);
-      res.send("sucessfully added comment for " + courseNum);
-      console.log("success");
-      res.end();
+      var total_rating = 0;
+      var comment_count = 0;
+      var comments = course.comments;
+      comments.forEach((comment) => {
+        comment_count = comment_count + 1;
+        total_rating = total_rating+comment.rating;
+      });
+      var avg = total_rating/comment_count;
+      course.rating = avg
+      course.save((err) => {
+        if (err) {
+          res.type("html").status(400);
+          res.write("Update course rating failed");
+          res.end();
+        } else {
+          res.type("html").status(200);
+          res.send("sucessfully added comment for " + courseNum);
+          console.log("success");
+          res.end();
+        }
+      });
+      // res.type("html").status(200);
+      // res.send("sucessfully added comment for " + courseNum);
+      // console.log("success");
+      // res.end();
       return;
     }
   });
@@ -1028,17 +1049,25 @@ app.get("/editCommentAndroid/:number/:comment_id", (req, res) => {
   var text = req.query.text;
   var rating = req.query.rating;
   var queryObject = { number: courseNum, "comments._id": comment_id };
+  if(isNaN(req.query.rating)){
+    res.type("html").status(400);
+    console.log("error: " + err);
+    res.write("Rating should be a number");
+    res.end();
+    return;
+  }
   if (Number(rating) < 0 || Number(rating) > 5) {
     res.type("html").status(400);
     console.log("error: " + err);
-    res.write("Rating should be within the range (0,5)");
+    res.write("Rating should be within the range [0,5]");
     res.end();
+    return;
   }
   Course.find(queryObject, (err, courses) => {
     if (err) {
       res.type("html").status(400);
       console.log("error: " + err);
-      res.write("edit comment failed: " + err);
+      res.write("Find course failed: " + err);
       res.end();
     } else if (courses.length == 0) {
       console.log("course not found");
