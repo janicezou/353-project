@@ -29,6 +29,9 @@
         <activity android:name=".One_comment" />
         <activity android:name=".Search" />
         <activity android:name=".ViewCourseComments" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".EditNameActivity" />
+        <activity android:name=".EditPasswordActivity" />
 
     </application>
     <uses-permission android:name="android.permission.INTERNET" />

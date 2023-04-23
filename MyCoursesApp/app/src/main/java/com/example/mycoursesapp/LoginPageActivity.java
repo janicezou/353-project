@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginPageActivity extends AppCompatActivity {
 
-    String email = "";
+    String email;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +30,12 @@ public class LoginPageActivity extends AppCompatActivity {
 
    public void onToSearchButtonClick(View v){
        Intent intent = new Intent(this, Search.class);
+       startActivity(intent);
+   }
+
+   public void onToMyProfileButtonClick(View v){
+       Intent intent = new Intent(this, ProfileActivity.class);
+       intent.putExtra("email", email);
        startActivity(intent);
    }
 

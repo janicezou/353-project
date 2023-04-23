@@ -17,13 +17,12 @@ var User = require("./User.js");
 // this is the action of the "add new course" form
 app.use("/add", async (req, res) => {
   // construct the Course from the form data which is in the request body
-  if(!req.body.number || !req.body.number ){
+  if (!req.body.number || !req.body.number) {
     res.type("html").status(200);
-    res.write('a course name and number must be specified');
+    res.write("a course name and number must be specified");
     res.write(' <a href="/templates/add-course.html">[BACK]</a>');
     res.end();
     return;
-
   }
   var average_rating = 0.0;
   var newCourse = new Course({
@@ -389,20 +388,18 @@ app.get("/viewComments/:number", (req, res) => {
         res.write("</li>");
       });
       res.write("</ul>");
-      average_rating = average_rating/comments.length;
+      average_rating = average_rating / comments.length;
       singleCourse.rating = average_rating;
-      res.write("Average Rating: " + (average_rating).toString())
+      res.write("Average Rating: " + average_rating.toString());
       res.write(' <a href="/templates/homepage.html">[HOME]</a>');
       res.end();
     }
   });
 });
 
-
-
-function updateRating(number){
+function updateRating(number) {
   var courseNum = number;
-  var average_rating = 0.0; 
+  var average_rating = 0.0;
   var queryObject = { number: courseNum };
   Course.find(queryObject, (err, courses) => {
     console.log(courses);
@@ -415,15 +412,13 @@ function updateRating(number){
       var average_rating = 0;
       comments.forEach((comment) => {
         average_rating += Number(comment.rating);
-
-     });
-     average_rating = average_rating/comments.length;
-     singleCourse.rating = average_rating;
+      });
+      average_rating = average_rating / comments.length;
+      singleCourse.rating = average_rating;
     }
   });
   return average_rating;
 }
-
 
 /**
  * User story 5
@@ -436,7 +431,6 @@ function updateRating(number){
  * @Param professor: the course professor
  */
 app.use("/search", async (req, res) => {
-  
   var filter = {};
   if (req.body.name) {
     filter.name = req.body.name;
@@ -476,7 +470,6 @@ app.use("/search", async (req, res) => {
           ' <a href="/internalDelete?number=' + course.number + '">[Delete]</a>'
         );
         res.write('<a href="/edit/' + course.number + '">[EDIT]</a><br>');
-
       });
       res.write("\n");
       res.write('<a href="/templates/homepage.html">[HOME]</a>');
@@ -513,8 +506,8 @@ app.get("/searching", async (req, res) => {
   try {
     // result = await Course.find(filter);//.sort({ rating: "asc" });
     var result;
-    if (req.query.sort && (req.query.sort == "name")) {
-      result = await Course.find(filter).sort({ name: 'asc' });
+    if (req.query.sort && req.query.sort == "name") {
+      result = await Course.find(filter).sort({ name: "asc" });
     } else {
       result = await Course.find(filter).sort({ rating: "asc" });
     }
@@ -539,11 +532,11 @@ app.get("/viewCourseComments/:number", async (req, res) => {
   var allComments = [];
   try {
     const result = await Course.find(filter);
-    if(result.length > 0){
+    if (result.length > 0) {
       var singleCourse = result[0];
       var comments = singleCourse.comments;
       comments.forEach((comment) => {
-        if(comment){
+        if (comment) {
           var comment_id = comment._id;
           var timestamp = comment.createdAt;
           var text = comment.text;
@@ -899,13 +892,13 @@ app.use("/addComment/:number", (req, res) => {
       }
     }
   });
-  if(isNaN(req.query.rating)){
+  if (isNaN(req.query.rating)) {
     res.type("html").status(404);
     res.send("The rating entered is not a number.");
     res.end();
     return;
   }
-  if(rating < 0 || rating > 5){
+  if (rating < 0 || rating > 5) {
     res.type("html").status(404);
     res.send("The rating should be within [0,5].");
     res.end();
@@ -926,7 +919,7 @@ app.use("/addComment/:number", (req, res) => {
       res.end();
       console.log(err);
       return;
-    } else if(!course) {
+    } else if (!course) {
       res.type("html").status(404);
       res.send("There is no course with course number " + courseNum);
       console.log("No course found");
@@ -938,10 +931,10 @@ app.use("/addComment/:number", (req, res) => {
       var comments = course.comments;
       comments.forEach((comment) => {
         comment_count = comment_count + 1;
-        total_rating = total_rating+comment.rating;
+        total_rating = total_rating + comment.rating;
       });
-      var avg = total_rating/comment_count;
-      course.rating = avg
+      var avg = total_rating / comment_count;
+      course.rating = avg;
       course.save((err) => {
         if (err) {
           res.type("html").status(404);
@@ -1049,7 +1042,7 @@ app.get("/editCommentAndroid/:number/:comment_id", (req, res) => {
   var text = req.query.text;
   var rating = req.query.rating;
   var queryObject = { number: courseNum, "comments._id": comment_id };
-  if(isNaN(req.query.rating)){
+  if (isNaN(req.query.rating)) {
     res.type("html").status(404);
     console.log("error: " + err);
     res.write("Rating should be a number");
@@ -1086,7 +1079,7 @@ app.get("/editCommentAndroid/:number/:comment_id", (req, res) => {
           res.end();
         } else {
           res.type("html").status(200);
-          console.log("edit comment from android success")
+          console.log("edit comment from android success");
           res.write("Edit success");
           res.end();
         }
@@ -1095,37 +1088,126 @@ app.get("/editCommentAndroid/:number/:comment_id", (req, res) => {
   });
 });
 
+/**
+ * see all users in the database
+ */
 app.use("/allUser", (req, res) => {
-  User.find({}, (err, allCourses) => {
+  User.find({}, (err, allUsers) => {
     if (err) {
       res.type("html").status(200);
-      res.write("An error occured. Could not find any users.");
+      res.write("An error occurred. Could not find any users.");
       res.write(' <a href="/templates/homepage.html">[HOME]</a>');
       res.end();
       return;
-    } else if (allCourses.length == 0) {
+    } else if (allUsers.length == 0) {
       res.type("html").status(200);
-      res.write("There are no user.");
+      res.write("There are no users.");
       res.write(' <a href="/templates/homepage.html">[HOME]</a>');
       res.end();
       return;
     } else {
       res.type("html").status(200);
-      res.write("There are " + allCourses.length + " users in the database.");
+      res.write("There are " + allUsers.length + " users in the database.");
       res.write("<ul>");
-      allCourses.forEach((course) => {
+      allUsers.forEach((user) => {
         res.write("<li>");
-        if (course) {
+        if (user) {
           res.write(
-            '<li>' + course.email + '</li>'
+            '<a href="/seeAllComments/' +
+              user.email +
+              '">' +
+              user.name +
+              "</a><br>"
           );
+          res.write("Email: " + user.email);
         }
         res.write("</li>");
       });
-      res.write("</li>");
+      res.write("</ul>");
       res.end();
     }
-  }).sort({ number: "asc" });
+  }).sort({ name: "asc" });
+});
+
+/**
+ * see all comments of a user
+ */
+app.use("/seeAllComments/:user_email", async (req, res) => {
+  var user_email = req.params.user_email;
+  var queryObject = { email: user_email };
+  var allComments = [];
+  queryObject = { "comments.user": user_email };
+  try {
+    const result = await Course.find(queryObject).sort({ createdAt: -1 });
+    if (result.length === 0) {
+      res.write("No comments found");
+      res.end();
+    } else {
+      res.type("html").status(200);
+      res.write("<ul>");
+      result.forEach((course) => {
+        course.comments.forEach((comment) => {
+          if (comment) {
+            if (comment.user === user_email) {
+              res.write("<li>");
+              res.write("Time: " + comment.createdAt + "<br>");
+              res.write("Comment: " + comment.text + "<br>");
+              res.write("Rating: " + comment.rating + "<br>");
+              res.write("Course Number: " + comment.courseNumber + "<br>");
+              res.write("</li>");
+            }
+          }
+        });
+        res.write("</ul>");
+        res.end();
+      });
+    }
+  } catch (err) {
+    res.write("Error: " + err);
+    res.end();
+  }
+});
+
+/**
+ * edit the username of a user
+ */
+app.use("/editUsername", async (req, res) => {
+  try {
+    const { email, newUsername } = req.body;
+    const user = await User.findOneAndUpdate(
+      { email },
+      { name: newUsername },
+      { new: true }
+    );
+    if (user) {
+      res.status(200).json({ message: "Username updated successfully" });
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "An error occurred", error });
+  }
+});
+
+/**
+ * edit the password of a user
+ */
+app.use("/editPassword", async (req, res) => {
+  try {
+    const { email, newPassword } = req.body;
+    const user = await User.findOneAndUpdate(
+      { email },
+      { password: newPassword },
+      { new: true }
+    );
+    if (user) {
+      res.status(200).json({ message: "Password updated successfully" });
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "An error occurred", error });
+  }
 });
 
 app.use("/", (req, res) => {
