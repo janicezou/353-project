@@ -892,7 +892,7 @@ app.use("/addComment/:number", (req, res) => {
     } else {
       if (user.length === 0) {
         console.log("not found");
-        res.type("html").status(400);
+        res.type("html").status(404);
         res.send("User Not Found");
         res.end();
         return;
@@ -900,13 +900,13 @@ app.use("/addComment/:number", (req, res) => {
     }
   });
   if(isNaN(req.query.rating)){
-    res.type("html").status(400);
+    res.type("html").status(404);
     res.send("The rating entered is not a number.");
     res.end();
     return;
   }
   if(rating < 0 || rating > 5){
-    res.type("html").status(400);
+    res.type("html").status(404);
     res.send("The rating should be within [0,5].");
     res.end();
     return;
@@ -921,13 +921,13 @@ app.use("/addComment/:number", (req, res) => {
   var action = { $push: { comments: commentObj } };
   Course.findOneAndUpdate(queryObject, action, (err, course) => {
     if (err) {
-      res.type("html").status(400);
+      res.type("html").status(404);
       res.send("Error writing comment");
       res.end();
       console.log(err);
       return;
     } else if(!course) {
-      res.type("html").status(400);
+      res.type("html").status(404);
       res.send("There is no course with course number " + courseNum);
       console.log("No course found");
       res.end();
@@ -944,7 +944,7 @@ app.use("/addComment/:number", (req, res) => {
       course.rating = avg
       course.save((err) => {
         if (err) {
-          res.type("html").status(400);
+          res.type("html").status(404);
           res.write("Update course rating failed");
           res.end();
         } else {
@@ -1010,11 +1010,11 @@ app.get("/deleteCommentAndroid/:number/:comment_id", (req, res) => {
   var queryObject = { number: courseNum };
   Course.find(queryObject, (e, courses) => {
     if (e) {
-      res.type("html").status(400);
+      res.type("html").status(404);
       res.write("Error " + e);
       res.end();
     } else if (courses.length == 0) {
-      res.type("html").status(400);
+      res.type("html").status(404);
       res.write("Course not found");
       res.end();
     } else {
@@ -1022,7 +1022,7 @@ app.get("/deleteCommentAndroid/:number/:comment_id", (req, res) => {
       courses[0].comments.id(comment_id).remove(); // delete the comment with id (_id)
       courses[0].save((err) => {
         if (err) {
-          res.type("html").status(400);
+          res.type("html").status(404);
           res.write("Delete comment failed");
           res.end();
         } else {
@@ -1050,14 +1050,14 @@ app.get("/editCommentAndroid/:number/:comment_id", (req, res) => {
   var rating = req.query.rating;
   var queryObject = { number: courseNum, "comments._id": comment_id };
   if(isNaN(req.query.rating)){
-    res.type("html").status(400);
+    res.type("html").status(404);
     console.log("error: " + err);
     res.write("Rating should be a number");
     res.end();
     return;
   }
   if (Number(rating) < 0 || Number(rating) > 5) {
-    res.type("html").status(400);
+    res.type("html").status(404);
     console.log("error: " + err);
     res.write("Rating should be within the range [0,5]");
     res.end();
@@ -1065,13 +1065,13 @@ app.get("/editCommentAndroid/:number/:comment_id", (req, res) => {
   }
   Course.find(queryObject, (err, courses) => {
     if (err) {
-      res.type("html").status(400);
+      res.type("html").status(404);
       console.log("error: " + err);
       res.write("Find course failed: " + err);
       res.end();
     } else if (courses.length == 0) {
       console.log("course not found");
-      res.type("html").status(400);
+      res.type("html").status(404);
       res.write("Course/comment not found");
       res.end();
     } else {
@@ -1080,7 +1080,7 @@ app.get("/editCommentAndroid/:number/:comment_id", (req, res) => {
       course.comments.id(comment_id).text = text;
       course.save((err, c) => {
         if (err) {
-          res.type("html").status(400);
+          res.type("html").status(404);
           console.log("error: " + err);
           res.write("edit comment failed: " + err);
           res.end();

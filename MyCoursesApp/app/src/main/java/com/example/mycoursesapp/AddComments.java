@@ -74,7 +74,9 @@ public class AddComments extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         }
-
+                        if(responseCode == 404){
+                            tv.setText(message);
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                         message = e.toString();
