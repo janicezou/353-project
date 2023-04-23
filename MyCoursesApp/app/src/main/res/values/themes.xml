@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.MyCoursesApp" parent="Theme.MaterialComponents.Light">
+    <style name="Theme.MyCoursesApp" parent="Theme.AppCompat.Light">
+        <item name="android:windowBackground">@drawable/background_gradient</item>
 <!--        &lt;!&ndash; Primary brand color. &ndash;&gt;-->
 <!--        <item name="colorPrimary">@color/purple_500</item>-->
 <!--        <item name="colorPrimaryVariant">@color/purple_700</item>-->
