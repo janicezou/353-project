@@ -27,9 +27,13 @@ public class AddComments extends AppCompatActivity {
     protected String message;
 
     public void backAddCommentAddButtonClick(View v){
+//        Intent intent = new Intent(this, LoginPageActivity.class);
+//        intent.putExtra("email", email);
+//        startActivity(intent);
         Intent intent = new Intent(this, LoginPageActivity.class);
         intent.putExtra("email", email);
         startActivity(intent);
+        finish();
     }
 
     public void onAddCommentAddButtonClick(View v) {
@@ -42,7 +46,22 @@ public class AddComments extends AppCompatActivity {
         String comment = edit_comment.getText().toString();
         if(course_number.length() <= 0 || rating.length() <= 0 || comment.length() <= 0){
            message = "comment underspecified";
-        } else {
+           tv.setText(message);
+           return;
+        }
+        int temp = -1;
+        try {
+            temp = Integer.parseInt(rating);
+        } catch(NumberFormatException e) {
+            message = "rating must be an integer";
+            tv.setText(message);
+            return;
+        }
+        if (temp < 0 || temp > 5){
+            message = "rating must be between 0 and 5";
+            tv.setText(message);
+            return;
+        }else {
             try {
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 executor.execute(() -> {
@@ -59,24 +78,26 @@ public class AddComments extends AppCompatActivity {
                         conn.setRequestMethod("GET");
                         conn.connect();
 
-                        if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                        int responseCode = conn.getResponseCode();
+
+                        if (responseCode == HttpURLConnection.HTTP_OK) {
+                            Scanner in = new Scanner(conn.getInputStream());
+                            message = in.nextLine();
+//                            tv.setText(message);
+//                            // add comment success go back to login page acitivity
+//                            Intent intent = new Intent(this, LoginPageActivity.class);
+//                            intent.putExtra("email", email);
+//                            startActivity(intent);
+//                            finish();
+                        } else if(responseCode == 404){
+                            message = "course or rating is invalid";
+//                            tv.setText(message);
+                        } else {
+                            conn.disconnect();
                             throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
                         }
+                        conn.disconnect();
 
-                        Scanner in = new Scanner(conn.getInputStream());
-                        message = in.nextLine();
-                        int responseCode = conn.getResponseCode();
-                        if (responseCode == 200) {
-                            tv.setText(message);
-                            // add comment success go back to login page acitivity
-                            Intent intent = new Intent(this, LoginPageActivity.class);
-                            intent.putExtra("email", email);
-                            startActivity(intent);
-                            finish();
-                        }
-                        if(responseCode == 404){
-                            tv.setText(message);
-                        }
                     } catch (Exception e) {
                         e.printStackTrace();
 //                        message = e.toString();
@@ -93,6 +114,6 @@ public class AddComments extends AppCompatActivity {
 //                message = e.toString();
             }
         }
-//        tv.setText(message);
+        tv.setText(message);
     }
 }
