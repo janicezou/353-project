@@ -138,6 +138,7 @@ app.get("/viewCourse/:number", (req, res) => {
     } else {
       res.type("html").status(200);
       singleCourse = course[0];
+      updateRating(singleCourse.number);
       res.write(
         singleCourse.number +
           " " +
