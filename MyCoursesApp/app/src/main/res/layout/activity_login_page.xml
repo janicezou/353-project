@@ -13,50 +13,55 @@
 
         <Button
             android:id="@+id/toSearchField"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="70dp"
             android:layout_marginTop="70dp"
             android:layout_marginBottom="70dp"
-            android:background="@drawable/rounded_rectangle"
+            android:layout_gravity="center"
+            android:background="@drawable/button_gradient"
             android:gravity="center"
             android:onClick="onToSearchButtonClick"
             android:text="Course Search" />
 
         <Button
             android:id="@+id/toAddCommentField"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="70dp"
             android:layout_marginBottom="70dp"
-            android:background="@drawable/rounded_rectangle"
+            android:layout_gravity="center"
+            android:background="@drawable/button_gradient"
             android:gravity="center"
             android:onClick="onAddCommentButtonClick"
             android:text="Add Comment" />
 
         <Button
             android:id="@+id/viewAllComments"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="70dp"
             android:layout_marginBottom="70dp"
-            android:background="@drawable/rounded_rectangle"
+            android:layout_gravity="center"
+            android:background="@drawable/button_gradient"
             android:gravity="center"
             android:onClick="onViewCommentButtonClick"
             android:text="View My Comments" />
 
         <Button
             android:id="@+id/toMyProfileField"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="70dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/rounded_rectangle"
+            android:layout_gravity="center"
+            android:background="@drawable/button_gradient"
             android:gravity="center"
             android:onClick="onToMyProfileButtonClick"
             android:text="My profile" />
 
         <Button
             android:id="@+id/toLogout"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:background="@drawable/rounded_rectangle"
+            android:layout_gravity="end"
+            android:background="@drawable/button_gradient"
             android:gravity="center"
             android:onClick="onLogoutButtonClick"
             android:text="@string/to_log_out" />

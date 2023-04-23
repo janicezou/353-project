@@ -21,33 +21,40 @@
         <EditText
             android:id="@+id/course_number"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/edit_text_border"
             android:hint="Course Number" />
 
         <EditText
             android:id="@+id/rating"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/edit_text_border"
             android:hint="Rating" />
 
         <EditText
             android:id="@+id/comment_text"
             android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
             android:layout_height="238dp"
             android:hint="Comment"
             android:inputType="text|textMultiLine" />
 
         <Button
             android:id="@+id/button_submit"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="80dp"
+            android:layout_gravity="end"
             android:text="Add comment"
             android:onClick="onAddCommentAddButtonClick" />
 
         <Button
             android:id="@+id/add_comment_bacl"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="80dp"
+            android:layout_gravity="end"
             android:text="Back"
             android:onClick="backAddCommentAddButtonClick" />
 
