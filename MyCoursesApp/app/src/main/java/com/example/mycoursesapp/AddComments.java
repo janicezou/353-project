@@ -41,56 +41,55 @@ public class AddComments extends AppCompatActivity {
         String rating = edit_rating.getText().toString();
         String comment = edit_comment.getText().toString();
         if(course_number.length() <= 0 || rating.length() <= 0 || comment.length() <= 0){
-            tv.setText("comment underspecified");
-            return;
-        }
-        try {
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            executor.execute( () -> {
-                try {
-                    // assumes that there is a server running on the AVD's host on port 3000
-                    // and that it has a /login endpoint
-                    String url_string = "http://10.0.2.2:3000/addComment/";
-                    url_string += course_number;
-                    url_string += "?email="+email+"&rating="+rating+"&text="+comment;
+           message = "comment underspecified";
+        } else {
+            try {
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                executor.execute(() -> {
+                    try {
+                        // assumes that there is a server running on the AVD's host on port 3000
+                        // and that it has a /login endpoint
+                        String url_string = "http://10.0.2.2:3000/addComment/";
+                        url_string += course_number;
+                        url_string += "?email=" + email + "&rating=" + rating + "&text=" + comment;
 
-                    URL url = new URL(url_string);
+                        URL url = new URL(url_string);
 
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("GET");
-                    conn.connect();
+                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        conn.setRequestMethod("GET");
+                        conn.connect();
 
-                    if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                        throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+                        if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                            throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+                        }
+
+                        Scanner in = new Scanner(conn.getInputStream());
+                        message = in.nextLine();
+                        int responseCode = conn.getResponseCode();
+                        if (responseCode == 200) {
+                            tv.setText(message);
+                            // add comment success go back to login page acitivity
+                            Intent intent = new Intent(this, LoginPageActivity.class);
+                            intent.putExtra("email", email);
+                            startActivity(intent);
+                            finish();
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        message = e.toString();
                     }
+                });
 
-                    Scanner in = new Scanner(conn.getInputStream());
-                    message = in.nextLine();
-                    int responseCode = conn.getResponseCode();
-                    if (responseCode == 200) {
-                        // login successful, go to login in page
-                        Intent intent = new Intent(this, LoginPageActivity.class);
-                        intent.putExtra("email", email);
-                        startActivity(intent);
-                        finish();
-                    }
+                // this waits for up to 2 seconds
+                // it's a bit of a hack because it's not truly asynchronous
+                // but it should be okay for our purposes (and is a lot easier)
+                executor.awaitTermination(2, TimeUnit.SECONDS);
 
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    message = e.toString();
-                }
-            });
-
-            // this waits for up to 2 seconds
-            // it's a bit of a hack because it's not truly asynchronous
-            // but it should be okay for our purposes (and is a lot easier)
-            executor.awaitTermination(2, TimeUnit.SECONDS);
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            message = e.toString();
+            } catch (Exception e) {
+                e.printStackTrace();
+                message = e.toString();
+            }
         }
         tv.setText(message);
     }

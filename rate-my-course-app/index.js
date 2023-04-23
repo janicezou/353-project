@@ -892,13 +892,25 @@ app.use("/addComment/:number", (req, res) => {
     } else {
       if (user.length === 0) {
         console.log("not found");
-        res.type("html").status(200);
+        res.type("html").status(400);
         res.send("User Not Found");
         res.end();
         return;
       }
     }
   });
+  if(isNaN(req.query.rating)){
+    res.type("html").status(400);
+    res.send("The rating entered is not a number.");
+    res.end();
+    return;
+  }
+  if(rating < 0 || rating > 5){
+    res.type("html").status(400);
+    res.send("The rating should be within [0,5].");
+    res.end();
+    return;
+  }
   queryObject = { number: courseNum };
   var commentObj = {
     user: email,
@@ -909,10 +921,16 @@ app.use("/addComment/:number", (req, res) => {
   var action = { $push: { comments: commentObj } };
   Course.findOneAndUpdate(queryObject, action, (err, course) => {
     if (err) {
-      res.type("html").status(200);
+      res.type("html").status(400);
       res.send("Error writing comment");
       res.end();
       console.log(err);
+      return;
+    } else if(!course) {
+      res.type("html").status(400);
+      res.send("There is no course with course number " + courseNum);
+      console.log("No course found");
+      res.end();
       return;
     } else {
       res.type("html").status(200);
