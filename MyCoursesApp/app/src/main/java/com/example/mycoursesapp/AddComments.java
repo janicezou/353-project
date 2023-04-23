@@ -79,7 +79,7 @@ public class AddComments extends AppCompatActivity {
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        message = e.toString();
+//                        message = e.toString();
                     }
                 });
 
@@ -90,9 +90,9 @@ public class AddComments extends AppCompatActivity {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                message = e.toString();
+//                message = e.toString();
             }
         }
-        tv.setText(message);
+//        tv.setText(message);
     }
 }
