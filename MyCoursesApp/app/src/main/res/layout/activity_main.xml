@@ -18,7 +18,6 @@
             android:text="@string/to_sign_up"
             android:layout_centerHorizontal="true"
             android:textSize="25sp"
-            android:textAppearance="lower"
             android:background="@drawable/gradient_button_primary"
             android:onClick="onToSignUpButtonClick"/>
 
@@ -28,7 +27,6 @@
             android:layout_height="70dp"
             android:layout_marginTop="350dp"
             android:textSize="25sp"
-            android:textAppearance="lower"
             android:background="@drawable/gradient_button_primary"
             android:text="@string/to_log_in"
             android:layout_centerHorizontal="true"
