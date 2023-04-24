@@ -771,7 +771,7 @@ app.get("/deleteComment/:number/:comment_id", (req, res) => {
     } else {
       // unique id for course, thus only one will be returned
       var course = courses[0];
-      var original_rating = course.comments.id(commen_id).rating;
+      var original_rating = course.comments.id(comment_id).rating;
       course.rating =
         (course.comments.length * course.rating - original_rating) /
         (course.comments.length - 1);
@@ -1025,7 +1025,7 @@ app.get("/deleteCommentAndroid/:number/:comment_id", (req, res) => {
       res.end();
     } else {
       var course = courses[0];
-      var original_rating = course.comments.id(commen_id).rating;
+      var original_rating = course.comments.id(comment_id).rating;
       course.rating =
         (course.comments.length * course.rating - original_rating) /
         (course.comments.length - 1);
