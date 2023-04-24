@@ -1142,6 +1142,7 @@ app.use("/seeAllComments/:user_email", async (req, res) => {
   try {
     const result = await Course.find(queryObject).sort({ createdAt: -1 });
     if (result.length === 0) {
+      res.type("html").status(200);
       res.write("No comments found");
       res.end();
     } else {
@@ -1160,9 +1161,9 @@ app.use("/seeAllComments/:user_email", async (req, res) => {
             }
           }
         });
-        res.write("</ul>");
-        res.end();
       });
+      res.write("</ul>");
+      res.end();
     }
   } catch (err) {
     res.write("Error: " + err);
