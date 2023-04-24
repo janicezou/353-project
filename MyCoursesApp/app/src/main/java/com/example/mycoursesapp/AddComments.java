@@ -83,7 +83,7 @@ public class AddComments extends AppCompatActivity {
                         if (responseCode == HttpURLConnection.HTTP_OK) {
                             Scanner in = new Scanner(conn.getInputStream());
                             message = in.nextLine();
-                            tv.setText(message);
+//                             tv.setText(message);
                             // add comment success go back to login page acitivity
                             Intent intent = new Intent(this, LoginPageActivity.class);
                             intent.putExtra("email", email);
@@ -92,7 +92,7 @@ public class AddComments extends AppCompatActivity {
 //                            return;
                         } else if(responseCode == 404){
                             message = "course or rating is invalid";
-//                            tv.setText(message);
+                           tv.setText(message);
                         } else {
                             conn.disconnect();
                             throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
