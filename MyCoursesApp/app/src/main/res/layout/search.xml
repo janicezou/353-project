@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background_image">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -40,6 +41,8 @@
             android:id="@+id/searchButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/gradient_button_secondary"
+            android:textColor="@color/white"
             android:onClick="onSearchButtonClick"
             android:text="Search"
             tools:layout_editor_absoluteX="20dp"
@@ -49,6 +52,9 @@
             android:id="@+id/backButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/gradient_button_secondary"
+            android:textColor="@color/white"
             android:onClick="onBackButtonClick"
             android:text="Back" />
 
@@ -56,6 +62,9 @@
             android:id="@+id/sortButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/gradient_button_secondary"
+            android:textColor="@color/white"
             android:onClick="onSortButtonClick"
             android:text="Sort" />
 

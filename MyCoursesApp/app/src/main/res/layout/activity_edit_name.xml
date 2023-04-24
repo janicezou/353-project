@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background_image">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,6 +28,10 @@
             android:id="@+id/updateUsernameButton"
             android:layout_width="130dp"
             android:layout_height="80dp"
+            android:background="@drawable/gradient_button_secondary"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:layout_gravity="end"
             android:onClick="onChangeNameButtonClick"
             android:text="Change Username" />
 
@@ -34,6 +39,11 @@
             android:id="@+id/button_back"
             android:layout_width="130dp"
             android:layout_height="80dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="end"
+            android:background="@drawable/gradient_button_secondary"
+            android:textColor="@color/white"
+            android:textSize="15sp"
             android:text="Go Back"
             android:onClick="onBackButtonClick" />
 
