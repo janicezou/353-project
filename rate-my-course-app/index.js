@@ -711,10 +711,14 @@ app.post("/editComment/:number/:comment_id", (req, res) => {
       res.end();
     } else {
       var course = courses[0];
-      var original_rating = course.comments.id(commen_id).rating;
+      var original_rating = course.comments.id(comment_id).rating;
       course.comments.id(comment_id).rating = Number(rating);
       course.comments.id(comment_id).text = text;
-      course.rating = (course.comments.length * course.rating - original_rating + Number(rating))/course.comments.length
+      course.rating =
+        (course.comments.length * course.rating -
+          original_rating +
+          Number(rating)) /
+        course.comments.length;
       course.save((err, c) => {
         if (err) {
           res.type("html").status(200);
@@ -768,7 +772,9 @@ app.get("/deleteComment/:number/:comment_id", (req, res) => {
       // unique id for course, thus only one will be returned
       var course = courses[0];
       var original_rating = course.comments.id(commen_id).rating;
-      course.rating = (course.comments.length * course.rating - original_rating)/(course.comments.length-1)
+      course.rating =
+        (course.comments.length * course.rating - original_rating) /
+        (course.comments.length - 1);
       course.comments.id(comment_id).remove(); // delete the comment with id (_id)
       course.save((err) => {
         if (err) {
@@ -1020,7 +1026,9 @@ app.get("/deleteCommentAndroid/:number/:comment_id", (req, res) => {
     } else {
       var course = courses[0];
       var original_rating = course.comments.id(commen_id).rating;
-      course.rating = (course.comments.length * course.rating - original_rating)/(course.comments.length-1)
+      course.rating =
+        (course.comments.length * course.rating - original_rating) /
+        (course.comments.length - 1);
       course.comments.id(comment_id).remove(); // delete the comment with id (_id)
       course.save((err) => {
         if (err) {
@@ -1078,10 +1086,14 @@ app.get("/editCommentAndroid/:number/:comment_id", (req, res) => {
       res.end();
     } else {
       var course = courses[0];
-      var original_rating = course.comments.id(commen_id).rating;
+      var original_rating = course.comments.id(comment_id).rating;
       course.comments.id(comment_id).rating = Number(rating);
       course.comments.id(comment_id).text = text;
-      course.rating = (course.comments.length * course.rating - original_rating + Number(rating))/course.comments.length
+      course.rating =
+        (course.comments.length * course.rating -
+          original_rating +
+          Number(rating)) /
+        course.comments.length;
       course.save((err, c) => {
         if (err) {
           res.type("html").status(404);
