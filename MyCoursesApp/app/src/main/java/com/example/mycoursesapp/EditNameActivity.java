@@ -160,6 +160,7 @@ public class EditNameActivity extends AppCompatActivity {
     public void onBackButtonClick(View v) {
         // create an intent to start the Profile Activity
         Intent i = new Intent(this, ProfileActivity.class);
+        i.putExtra("email", email);
         startActivity(i);
         // direct to profile page
     }

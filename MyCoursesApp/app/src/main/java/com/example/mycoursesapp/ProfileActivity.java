@@ -32,6 +32,7 @@ public class ProfileActivity extends AppCompatActivity {
     public void onBackButtonClick(View v) {
         // create an intent to start the Main Activity
         Intent i = new Intent(this, LoginPageActivity.class);
+        i.putExtra("email", email);
         startActivity(i);
         // direct to main page
     }
