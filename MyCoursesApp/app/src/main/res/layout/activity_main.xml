@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_image"
     tools:context=".MainActivity">
 
     <RelativeLayout
@@ -16,7 +17,8 @@
             android:layout_marginTop="250dp"
             android:text="@string/to_sign_up"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/button_gradient"
+            android:textSize="25sp"
+            android:background="@drawable/gradient_button_primary"
             android:onClick="onToSignUpButtonClick"/>
 
         <Button
@@ -24,7 +26,8 @@
             android:layout_width="200dp"
             android:layout_height="70dp"
             android:layout_marginTop="350dp"
-            android:background="@drawable/button_gradient"
+            android:textSize="25sp"
+            android:background="@drawable/gradient_button_primary"
             android:text="@string/to_log_in"
             android:layout_centerHorizontal="true"
             android:onClick="onToLogInButtonClick" />

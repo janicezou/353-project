@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background_image">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/profileUsernameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_centerHorizontal="true"
+            android:textSize="30sp" />
 
         <Button
             android:id="@+id/toSignUpField"
@@ -14,7 +23,7 @@
             android:layout_marginTop="250dp"
             android:text="@string/edit_username"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/button_gradient"
+            android:background="@drawable/gradient_button_primary"
             android:onClick="onToEditNameButtonClick"/>
 
         <Button
@@ -22,7 +31,7 @@
             android:layout_width="200dp"
             android:layout_height="70dp"
             android:layout_marginTop="350dp"
-            android:background="@drawable/button_gradient"
+            android:background="@drawable/gradient_button_primary"
             android:text="@string/edit_password"
             android:layout_centerHorizontal="true"
             android:onClick="onToEditPasswordButtonClick" />
@@ -31,8 +40,11 @@
             android:id="@+id/button_back"
             android:layout_width="130dp"
             android:layout_height="80dp"
-            android:layout_gravity="end"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="600dp"
+            android:background="@drawable/gradient_button_secondary"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:layout_alignParentRight="true"
             android:onClick="onBackButtonClick"
             android:text="Go Back" />
 
