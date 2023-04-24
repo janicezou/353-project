@@ -138,7 +138,7 @@ app.get("/viewCourse/:number", (req, res) => {
     } else {
       res.type("html").status(200);
       singleCourse = course[0];
-      updateRating(singleCourse.number);
+      // updateRating(singleCourse.number);
       res.write(
         singleCourse.number +
           " " +
@@ -494,7 +494,7 @@ app.get("/searching", async (req, res) => {
   }
   if (req.query.number) {
     filter.number = req.query.number;
-    updateRating(req.body.number);
+    // updateRating(req.body.number);
   }
   if (req.query.department) {
     filter.department = req.query.department;
