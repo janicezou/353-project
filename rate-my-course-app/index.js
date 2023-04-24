@@ -927,13 +927,14 @@ app.use("/addComment/:number", (req, res) => {
       res.end();
       return;
     } else {
-      var total_rating = 0;
-      var comment_count = 0;
+      var total_rating = Number(req.query.rating);
+      var comment_count = 1;
       var comments = course.comments;
       comments.forEach((comment) => {
         comment_count = comment_count + 1;
         total_rating = total_rating + comment.rating;
       });
+      console.log(comments.length);
       var avg = total_rating / comment_count;
       course.rating = avg;
       course.save((err) => {
